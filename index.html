@@ -3,209 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA CABRA NEGRA | Elite Streaming</title>
+    <title>LA CABRA NEGRA | Multi-Theme Streaming</title>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     
     <style>
+        /* --- VARIABLES DINÁMICAS --- */
         :root {
-            --naranja-neon: #ff5722;
-            --naranja-glow: rgba(255, 87, 34, 0.5);
-            --fondo-oscuro: #050505;
+            --color-principal: #007bff; /* Color inicial (Azul) */
+            --color-glow: rgba(0, 123, 255, 0.4);
+            --negro-profundo: #050505;
+            --negro-tarjeta: #111;
             --vidrio: rgba(255, 255, 255, 0.05);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--negro-profundo); color: white; overflow: hidden; transition: 0.3s; }
 
-        body {
-            background-color: var(--fondo-oscuro);
-            color: white;
-            overflow: hidden; /* Evita scroll doble */
-        }
-
-        /* --- BACKGROUND DINÁMICO --- */
-        .bg-glow {
-            position: fixed; top: -10%; left: -10%; width: 40%; height: 40%;
-            background: radial-gradient(circle, var(--naranja-glow) 0%, transparent 70%);
-            z-index: -1; filter: blur(80px);
-        }
-
-        /* --- HEADER --- */
+        /* HEADER */
         header {
             height: 70px; display: flex; justify-content: space-between; align-items: center;
-            padding: 0 30px; background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px); border-bottom: 1px solid var(--vidrio);
-            position: fixed; width: 100%; z-index: 1000;
+            padding: 0 30px; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--color-principal); position: fixed; width: 100%; z-index: 1000;
         }
+        .logo { font-family: 'Syncopate', sans-serif; color: var(--color-principal); text-shadow: 0 0 15px var(--color-glow); }
 
-        .logo { font-family: 'Syncopate', sans-serif; color: var(--naranja-neon); letter-spacing: 3px; }
-
-        .search-bar {
-            background: var(--vidrio); border: 1px solid #333; padding: 8px 20px;
-            border-radius: 20px; width: 40%; display: flex;
-        }
-
-        .search-bar input {
-            background: none; border: none; color: white; width: 100%; outline: none;
-        }
-
-        /* --- LAYOUT --- */
+        /* LAYOUT */
         .main-container { display: flex; margin-top: 70px; height: calc(100vh - 70px); }
-
-        /* Barra Lateral */
-        aside {
-            width: 260px; background: rgba(10, 10, 10, 0.5);
-            padding: 20px; border-right: 1px solid var(--vidrio);
-        }
-
+        aside { width: 240px; background: #000; padding: 20px; border-right: 1px solid #222; }
+        
         .nav-item {
-            padding: 15px; border-radius: 12px; cursor: pointer;
-            margin-bottom: 8px; transition: 0.3s; display: flex; align-items: center; gap: 15px;
-            color: #888;
+            padding: 12px; border-radius: 10px; cursor: pointer; margin-bottom: 10px;
+            color: #888; transition: 0.3s; display: flex; align-items: center; gap: 10px;
         }
+        .nav-item.active, .nav-item:hover { background: var(--vidrio); color: var(--color-principal); }
 
-        .nav-item:hover, .nav-item.active {
-            background: var(--vidrio); color: var(--naranja-neon);
-            box-shadow: inset 0 0 10px rgba(255,87,34,0.1);
-        }
+        main { flex-grow: 1; padding: 30px; overflow-y: auto; background: radial-gradient(circle at top right, #111, #000); }
 
-        /* Área de Contenido */
-        main { flex-grow: 1; padding: 30px; overflow-y: auto; scroll-behavior: smooth; }
-
+        /* SECCIONES */
         .section { display: none; }
-        .section.active { display: block; animation: fadeInUp 0.6s ease forwards; }
+        .section.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* PANEL DE CONFIGURACIÓN */
+        .theme-selector {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 15px; margin-top: 20px;
         }
-
-        /* --- COMPONENTES DE VIDEO --- */
-        .video-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;
+        .color-dot {
+            height: 50px; border-radius: 10px; cursor: pointer; border: 2px solid transparent;
+            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; color: black;
         }
+        .color-dot:hover { transform: scale(1.05); border-color: white; }
 
-        .video-card {
-            background: #111; border-radius: 15px; overflow: hidden;
-            border: 1px solid var(--vidrio); transition: 0.4s; cursor: pointer;
+        /* VIDEOS */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .video-card { background: var(--negro-tarjeta); border-radius: 15px; overflow: hidden; border: 1px solid #222; transition: 0.3s; }
+        .video-card:hover { border-color: var(--color-principal); box-shadow: 0 0 20px var(--color-glow); }
+        .thumb { height: 180px; background: #000; }
+        .info { padding: 15px; }
+
+        /* MODALES */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center;
         }
-
-        .video-card:hover {
-            transform: scale(1.03); border-color: var(--naranja-neon);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .modal-content {
+            background: #111; padding: 40px; border-radius: 20px; border: 1px solid var(--color-principal);
+            width: 380px; text-align: center;
         }
-
-        .thumbnail {
-            height: 160px; background: #222; position: relative;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .play-icon { font-size: 40px; opacity: 0; transition: 0.3s; }
-        .video-card:hover .play-icon { opacity: 1; color: var(--naranja-neon); }
-
-        .video-info { padding: 15px; }
-        .video-info h4 { margin-bottom: 5px; font-size: 1rem; }
-        .video-info p { color: #666; font-size: 0.85rem; }
-
-        /* Botón Subir */
-        .btn-upload {
-            background: var(--naranja-neon); color: black; font-weight: bold;
-            padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn-upload:hover { box-shadow: 0 0 20px var(--naranja-glow); transform: translateY(-2px); }
-
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; border-radius: 8px; }
+        .btn-main { width: 100%; padding: 12px; background: var(--color-principal); border: none; font-weight: bold; border-radius: 8px; cursor: pointer; color: black; }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-
     <header>
         <div class="logo">LA CABRA NEGRA</div>
-        <div class="search-bar">
-            <input type="text" placeholder="Explorar videos, streamers...">
-        </div>
-        <button class="btn-upload">SUBIR VIDEO</button>
+        <button class="nav-item" style="color:white; border:1px solid var(--color-principal)" onclick="abrirModal('modal-login')">CUENTA</button>
     </header>
 
     <div class="main-container">
         <aside>
-            <div class="nav-item active" onclick="showTab('inicio', this)">🏠 Inicio</div>
-            <div class="nav-item" onclick="showTab('tendencias', this)">🔥 Tendencias</div>
-            <div class="nav-item" onclick="showTab('mi-canal', this)">👤 Mi Canal</div>
-            <div class="nav-item" onclick="showTab('ajustes', this)">⚙️ Ajustes</div>
+            <div class="nav-item active" id="btn-cartelera" onclick="showTab('inicio', this)">📺 Cartelera</div>
+            <div class="nav-item" onclick="abrirModal('modal-subir')">📤 Publicar</div>
+            <div class="nav-item" id="btn-ajustes" onclick="showTab('ajustes', this)">⚙️ Ajustes</div>
         </aside>
 
-        <main id="view-port">
-            
+        <main>
             <section id="inicio" class="section active">
-                <h2 style="margin-bottom: 25px;">Recomendados</h2>
+                <h2 style="margin-bottom: 20px;">Publicidad Global</h2>
                 <div class="video-grid" id="grid-videos">
-                    </div>
-            </section>
-
-            <section id="tendencias" class="section">
-                <h2 style="margin-bottom: 25px;">Lo más pegado 🔥</h2>
-                <div class="video-grid" id="grid-tendencias"></div>
-            </section>
-
-            <section id="mi-canal" class="section">
-                <div style="background: var(--vidrio); padding: 40px; border-radius: 20px; text-align: center;">
-                    <div style="width: 100px; height: 100px; background: var(--naranja-neon); border-radius: 50%; margin: 0 auto 20px;"></div>
-                    <h2>Tu Canal Oficial</h2>
-                    <p style="color: #888;">0 Seguidores • 0 Videos</p>
-                    <button class="btn-upload" style="margin-top: 20px;">Personalizar Canal</button>
+                    <p style="color:#444">No hay videos aún. ¡Sé el primero!</p>
                 </div>
             </section>
 
+            <section id="ajustes" class="section">
+                <h2>Configuración de Estilo</h2>
+                <p style="color:#888; margin-bottom: 30px;">Personaliza el color de tu plataforma</p>
+                
+                <h3>Elige un Color de Tema:</h3>
+                <div class="theme-selector">
+                    <div class="color-dot" style="background: #007bff;" onclick="cambiarColor('#007bff', 'rgba(0,123,255,0.4)')">Azul</div>
+                    <div class="color-dot" style="background: #ff5722;" onclick="cambiarColor('#ff5722', 'rgba(255,87,34,0.4)')">Naranja</div>
+                    <div class="color-dot" style="background: #2ecc71;" onclick="cambiarColor('#2ecc71', 'rgba(46,204,113,0.4)')">Verde</div>
+                    <div class="color-dot" style="background: #e74c3c;" onclick="cambiarColor('#e74c3c', 'rgba(231,76,60,0.4)')">Rojo</div>
+                    <div class="color-dot" style="background: #9b59b6;" onclick="cambiarColor('#9b59b6', 'rgba(155,89,182,0.4)')">Morado</div>
+                    <div class="color-dot" style="background: #f1c40f;" onclick="cambiarColor('#f1c40f', 'rgba(241,196,15,0.4)')">Amarillo</div>
+                </div>
+            </section>
         </main>
     </div>
 
+    <div id="modal-login" class="modal"><div class="modal-content"><h2>CUENTA</h2><input type="email" placeholder="Correo"><button class="btn-main" onclick="cerrarModales()">ENTRAR</button></div></div>
+    
+    <div id="modal-subir" class="modal">
+        <div class="modal-content">
+            <h2>SUBIR VIDEO</h2>
+            <input type="text" id="v-titulo" placeholder="Título">
+            <input type="text" id="v-url" placeholder="URL de YouTube">
+            <button class="btn-main" onclick="procesarVideo()">PUBLICAR</button>
+            <p onclick="cerrarModales()" style="margin-top:10px; cursor:pointer">Cancelar</p>
+        </div>
+    </div>
+
     <script>
-        // --- BASE DE DATOS DE EJEMPLO ---
-        const videosData = [
-            { titulo: "Tutorial de Git en Canaima", autor: "Admin", vistas: "1.2k" },
-            { titulo: "Gameplay La Cabra Negra", autor: "GamerPro", vistas: "5.6k" },
-            { titulo: "Directo de Programación", autor: "DevUser", vistas: "800" },
-            { titulo: "Música para Programar", autor: "LoFi", vistas: "10k" }
-        ];
-
-        // Función para cargar videos automáticamente
-        function cargarVideos() {
-            const grid = document.getElementById('grid-videos');
-            const gridTendencias = document.getElementById('grid-tendencias');
-            
-            let html = '';
-            videosData.forEach(v => {
-                html += `
-                    <div class="video-card">
-                        <div class="thumbnail"><span class="play-icon">▶</span></div>
-                        <div class="video-info">
-                            <h4>${v.titulo}</h4>
-                            <p>${v.autor}</p>
-                            <p>${v.vistas} vistas</p>
-                        </div>
-                    </div>
-                `;
-            });
-            grid.innerHTML = html;
-            gridTendencias.innerHTML = html; // Reutilizamos por ahora
+        // --- FUNCIÓN PARA CAMBIAR EL COLOR EN TODA LA PÁGINA ---
+        function cambiarColor(color, glow) {
+            document.documentElement.style.setProperty('--color-principal', color);
+            document.documentElement.style.setProperty('--color-glow', glow);
         }
 
-        // --- SISTEMA DE NAVEGACIÓN ---
-        function showTab(id, elemento) {
-            // Ocultar secciones
+        function showTab(id, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            // Quitar clase activa de botones
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            
-            // Mostrar la seleccionada
             document.getElementById(id).classList.add('active');
-            elemento.classList.add('active');
+            el.classList.add('active');
         }
 
-        // Ejecutar al cargar
-        window.onload = cargarVideos;
+        function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function cerrarModales() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
+
+        function procesarVideo() {
+            const t = document.getElementById('v-titulo').value;
+            const u = document.getElementById('v-url').value;
+            const id = u.split('v=')[1]?.split('&')[0] || u.split('/').pop();
+            const grid = document.getElementById('grid-videos');
+            if(grid.innerHTML.includes('No hay videos')) grid.innerHTML = '';
+            
+            grid.innerHTML = `
+                <div class="video-card">
+                    <div class="thumb"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="info"><h4>${t}</h4><p style="color:var(--color-principal)">Activo ahora</p></div>
+                </div>
+            ` + grid.innerHTML;
+            cerrarModales();
+        }
     </script>
 </body>
 </html>
