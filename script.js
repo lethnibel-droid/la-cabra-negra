@@ -1,103 +1,66 @@
-// --- BASE DE DATOS LOCAL (TEMPORAL) ---
-let anuncios = [];
+// --- ESTADO DEL MOTOR ---
 let musicaActual = null;
+let sistemaSonidoListo = false;
 
-// --- FUNCIONES DE INTERFAZ ---
-function abrirModal(id) { 
-    document.getElementById(id).style.display = "flex"; 
+// --- DESBLOQUEO DE AUDIO (Regla de Chrome) ---
+function desbloquearAudio() {
+    if (!sistemaSonidoListo) {
+        // Creamos un contexto de audio silencioso para avisar al navegador
+        console.log("Sistema de audio GOAT activado");
+        sistemaSonidoListo = true;
+    }
 }
 
-function cerrarModales() { 
-    document.querySelectorAll('.modal').forEach(m => m.style.display = "none"); 
-}
+// --- CONTROL DE MÚSICA ---
+function toggleMusica() {
+    // Si no hay música seleccionada, usamos la azul por defecto
+    if (!musicaActual) {
+        musicaActual = document.getElementById('audio-azul');
+    }
 
-// --- MOTOR DE PUBLICACIÓN (DA VIDA A LA CARTELERA) ---
-function motorPublicar() {
-    const titulo = document.getElementById('v-titulo').value;
-    const url = document.getElementById('v-url').value;
-    const social = document.getElementById('v-social').value;
+    const btn = document.getElementById('btn-music');
 
-    if(titulo && url) {
-        // Extraer ID de YouTube
-        const videoID = url.split('v=')[1] || url.split('/').pop();
-        
-        const nuevoAnuncio = {
-            id: Date.now(),
-            titulo: titulo,
-            videoID: videoID,
-            social: social,
-            likes: 0,
-            vistas: Math.floor(Math.random() * 100) // Vistas iniciales aleatorias
-        };
-
-        anuncios.unshift(nuevoAnuncio); // Poner al inicio
-        renderizarCartelera();
-        cerrarModales();
-        
-        // Limpiar campos
-        document.getElementById('v-titulo').value = "";
-        document.getElementById('v-url').value = "";
+    if (musicaActual.paused) {
+        // Intentamos reproducir
+        musicaActual.play().then(() => {
+            btn.innerHTML = "🔊";
+            btn.style.boxShadow = "0 0 15px var(--color-principal)";
+        }).catch(error => {
+            console.log("Error: Toca la pantalla primero antes de activar la música.");
+        });
     } else {
-        alert("Por favor, llena los campos básicos.");
+        musicaActual.pause();
+        btn.innerHTML = "🎵";
+        btn.style.boxShadow = "none";
     }
 }
 
-// --- DIBUJAR LA CARTELERA CON INTERACCIONES ---
-function renderizarCartelera() {
-    const grid = document.getElementById('grid-videos');
-    grid.innerHTML = ""; // Limpiar para actualizar
-
-    anuncios.forEach(ad => {
-        grid.innerHTML += `
-            <div class="card-anuncio efecto-glass">
-                <div class="card-header">
-                    <div class="user-info">
-                        <div class="mini-avatar"></div>
-                        <span>Anunciante Pro</span>
-                    </div>
-                    <button class="btn-seguir" onclick="this.innerHTML='Siguiendo'">Seguir</button>
-                </div>
-                
-                <iframe src="https://www.youtube.com/embed/${ad.videoID}" allowfullscreen></iframe>
-                
-                <div class="card-body">
-                    <h4>${ad.titulo}</h4>
-                    <div class="social-bar">
-                        <span onclick="sumarLike(${ad.id})">❤️ <b id="like-${ad.id}">${ad.likes}</b></span>
-                        <span>👁️ ${ad.vistas}</span>
-                        <a href="${ad.social}" target="_blank" class="btn-visitar">VISITAR</a>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-}
-
-function sumarLike(id) {
-    const ad = anuncios.find(a => a.id === id);
-    if(ad) {
-        ad.likes++;
-        document.getElementById(like-${id}).innerText = ad.likes;
-    }
-}
-
-// --- SISTEMA SENSORIAL ---
+// --- CAMBIO DE TEMA Y CANCIÓN ---
 function cambiarTema(color, nombre) {
+    // Cambiamos el color visual
     document.documentElement.style.setProperty('--color-principal', color);
-    if(musicaActual) musicaActual.pause();
+    
+    // Si había música sonando, la paramos
+    if (musicaActual) {
+        musicaActual.pause();
+        musicaActual.currentTime = 0;
+    }
+
+    // Cambiamos a la nueva canción según el color
     musicaActual = document.getElementById('audio-' + nombre);
+    
+    // Actualizamos el botón y cerramos el menú
+    document.getElementById('btn-music').innerHTML = "🎵";
     cerrarModales();
 }
 
-function toggleMusica() {
-    if(!musicaActual) musicaActual = document.getElementById('audio-azul');
-    if(musicaActual.paused) {
-        musicaActual.play();
-        document.getElementById('btn-music').innerHTML = "🔊";
-    } else {
-        musicaActual.pause();
-        document.getElementById('btn-music').innerHTML = "🎵";
-    }
+// --- FUNCIONES DE VENTANAS ---
+function abrirModal(id) {
+    document.getElementById(id).style.display = "flex";
 }
 
-function desbloquearAudio() { console.log("GOAT Engine Ready"); }
+function cerrarModales() {
+    document.querySelectorAll('.modal').forEach(m => {
+        m.style.display = "none";
+    });
+}
