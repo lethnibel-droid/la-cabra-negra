@@ -62,3 +62,23 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+<div class="controles-extra">
+    <button class="btn-flotante-subir" onclick="abrirModal('modal-subir')">📤 PUBLICAR</button>
+    
+    <button id="btn-music" onclick="toggleMusica()">🎵 MÚSICA: OFF</button>
+</div>
+
+<div id="modal-subir" class="modal">
+    <div class="modal-content">
+        <h3>Publicar en Cartelera</h3>
+        <input type="text" id="v-titulo" placeholder="Título del anuncio">
+        <input type="text" id="v-url" placeholder="Link de YouTube">
+        <button class="btn-ui" onclick="publicar()">SUBIR AHORA</button>
+        <button onclick="cerrarModales()" style="background:none; border:none; color:gray; cursor:pointer; margin-top:10px;">Cerrar</button>
+    </div>
+</div>
+
+<audio id="audio-azul" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+<audio id="audio-rojo" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+<audio id="audio-morado" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"></audio>
