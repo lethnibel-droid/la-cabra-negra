@@ -67,3 +67,21 @@ iframe { width: 100%; aspect-ratio: 16/9; border: none; }
     .video-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); flex: 1; }
     .btn-ui { font-size: 0.9rem; padding: 10px 20px; }
 }
+card-anuncio {
+    background: #111;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    animation: aparecer 0.5s ease;
+}
+
+iframe {
+    width: 100%;
+    aspect-ratio: 16/9;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
