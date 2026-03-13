@@ -1,94 +1,65 @@
 :root {
-    --color-principal: #00d2ff; /* Azul por defecto */
-    --color-glow: rgba(0, 210, 255, 0.4);
-    --glass: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --color-principal: #00d2ff;
+    --glass: rgba(20, 20, 20, 0.85);
+    --border: rgba(255, 255, 255, 0.1);
 }
 
-/* --- BASE DEL SISTEMA --- */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
 
-body { 
-    background: #000; 
-    color: white; 
-    overflow-x: hidden;
-    background-image: radial-gradient(circle at top right, var(--color-glow), transparent 400px);
-}
+body { background: #000; color: white; min-height: 100vh; overflow-x: hidden; }
 
 .efecto-glass {
     background: var(--glass);
     backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid var(--glass-border);
+    border: 1px solid var(--border);
 }
 
-/* --- CABECERA (ESTILO YOUTUBE/ADS) --- */
 .navbar {
-    height: 70px; width: 100%; position: fixed; top: 0; z-index: 1000;
-    display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+    height: 70px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; position: fixed; width: 100%; z-index: 100;
 }
 
-.logo { font-size: 1.4rem; font-weight: 900; letter-spacing: -1px; color: var(--color-principal); text-shadow: 0 0 15px var(--color-glow); }
+.logo { 
+    font-size: 1.5rem; font-weight: 900; color: var(--color-principal);
+    text-shadow: 0 0 15px var(--color-principal);
+}
 
-.header-right { display: flex; gap: 10px; align-items: center; }
-
-/* --- LAYOUT ADAPTATIVO (MÓVIL Y PC) --- */
-.layout { display: flex; padding-top: 80px; }
+.layout { display: flex; padding-top: 80px; max-width: 1400px; margin: 0 auto; }
 
 .sidebar {
-    width: 240px; height: calc(100vh - 80px); position: fixed; left: 10px; border-radius: 20px;
-    padding: 20px; display: flex; flex-direction: column;
+    width: 250px; height: 80vh; position: sticky; top: 80px;
+    border-radius: 20px; padding: 20px; margin: 0 20px;
 }
 
-.feed { width: 100%; margin-left: 260px; padding: 0 20px 100px 0; }
+.feed { flex: 1; padding-right: 20px; }
 
-/* --- SECCIÓN HISTORIAS (ESTILO FB) --- */
-.stories-container {
-    display: flex; gap: 15px; overflow-x: auto; padding: 10px 0 20px;
-    scrollbar-width: none;
-}
-.story-circle {
-    min-width: 70px; height: 70px; border-radius: 50%; 
-    border: 3px solid var(--color-principal); padding: 3px;
+.stories { display: flex; gap: 15px; padding-bottom: 20px; overflow-x: auto; }
+
+.story-circle, .story-add {
+    min-width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--color-principal);
+    background: var(--glass); display: flex; align-items: center; justify-content: center;
 }
 
-/* --- CARTELERA DE ANUNCIOS --- */
-.video-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px;
-}
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 
-.card-anuncio {
-    background: #111; border-radius: 20px; overflow: hidden;
-    border: 1px solid var(--glass-border); transition: 0.3s;
-}
-.card-anuncio:hover { border-color: var(--color-principal); transform: translateY(-5px); }
-
-iframe { width: 100%; height: 200px; border: none; }
-
-/* --- BOTONES Y UI --- */
-.btn-ui {
-    background: var(--color-principal); color: black; border: none;
-    padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer;
-}
-
-.btn-circular {
-    width: 40px; height: 40px; border-radius: 50%; background: var(--glass);
-    border: 1px solid var(--glass-border); color: white; cursor: pointer;
-}
-
-/* --- RESPONSIVE (ARREGLO PARA TU CELULAR) --- */
-@media (max-width: 900px) {
-    .sidebar { display: none; } /* Ocultamos sidebar en móvil para dar espacio */
-    .feed { margin-left: 0; padding: 20px; }
-    .video-grid { grid-template-columns: 1fr; }
-    .navbar { padding: 0 15px; }
-    .logo { font-size: 1.1rem; }
-}
-
-/* --- MODALES --- */
 .modal {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-    z-index: 2000; align-items: center; justify-content: center;
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+    z-index: 1000; align-items: center; justify-content: center;
 }
-.modal-content { padding: 30px; border-radius: 30px; width: 90%; max-width: 400px; text-align: center; }
-input { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: white; border-radius: 12px; }
+
+.modal-content { width: 90%; max-width: 400px; padding: 30px; border-radius: 25px; text-align: center; }
+
+input { width: 100%; padding: 12px; margin: 10px 0; background: #111; border: 1px solid #333; color: white; border-radius: 10px; }
+
+.btn-ui { background: var(--color-principal); color: #000; border: none; padding: 10px 20px; border-radius: 50px; font-weight: 800; cursor: pointer; }
+
+.btn-circular { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--glass); color: white; cursor: pointer; margin-left: 10px; }
+
+.picker { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
+.dot { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+.azul { background: #00d2ff; } .rojo { background: #ff004c; } .morado { background: #bc00ff; }
+
+@media (max-width: 800px) {
+    .sidebar { display: none; }
+    .layout { padding: 80px 15px 0 15px; }
+}
