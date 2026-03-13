@@ -19,374 +19,128 @@
             --text-main: #ffffff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); overflow-x:hidden; min-height:100vh; }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border:1px solid var(--glass-border); border-radius:15px; box-shadow:0 8px 32px 0 rgba(0,0,0,0.8); padding:15px; margin-bottom:20px; }
+        .neon-shadow-blue { box-shadow:0 0 15px var(--neon-blue); }
+        .neon-shadow-purple { box-shadow:0 0 15px var(--neon-purple); }
 
-        /* --- UI COMPONENTS (Glassmorphism) --- */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-        }
+        header { padding:20px; text-align:center; border-bottom:1px solid var(--neon-blue); margin-bottom:20px; }
+        .logo { font-size:1.8rem; font-weight:bold; text-transform:uppercase; letter-spacing:3px; color: var(--neon-blue); text-shadow:0 0 10px var(--neon-blue); }
 
-        .neon-shadow-blue { box-shadow: 0 0 15px var(--neon-blue); }
-        .neon-shadow-purple { box-shadow: 0 0 15px var(--neon-purple); }
+        nav { position:fixed; bottom:0; width:100%; display:flex; justify-content:space-around; padding:15px; background:rgba(0,0,0,0.9); border-top:1px solid var(--neon-purple); z-index:1000; }
+        nav button { background:none; border:none; color:#fff; font-size:0.8rem; cursor:pointer; transition:0.3s; }
+        nav button.active { color: var(--neon-blue); text-shadow:0 0 8px var(--neon-blue); }
 
-        /* --- LAYOUT --- */
-        header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--neon-blue);
-            margin-bottom: 20px;
-        }
+        .container { padding:20px; padding-bottom:100px; max-width:800px; margin:0 auto; }
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
-        }
+        .section { display:none; }
+        .section.active { display:block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
-        nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px;
-            background: rgba(0,0,0,0.9);
-            border-top: 1px solid var(--neon-purple);
-            z-index: 1000;
-        }
+        input, select { width:100%; padding:12px; margin:10px 0; background: rgba(255,255,255,0.1); border:1px solid var(--glass-border); color:#fff; border-radius:8px; }
+        .btn-action { width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; text-transform:uppercase; margin-top:10px; }
+        .btn-blue { background: var(--neon-blue); color:#000; }
+        .btn-purple { background: var(--neon-purple); color:#fff; }
 
-        nav button {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+        .video-item { margin-bottom:25px; padding:15px; }
+        .video-wrapper { position:relative; padding-bottom:56.25%; height:0; border-radius:10px; overflow:hidden; }
+        .video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; }
 
-        nav button.active {
-            color: var(--neon-blue);
-            text-shadow: 0 0 8px var(--neon-blue);
-        }
+        #login-screen { height:80vh; display:flex; flex-direction:column; justify-content:center; align-items:center; }
 
-        .container {
-            padding: 20px;
-            padding-bottom: 100px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.5s ease; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* --- FORMS & BUTTONS --- */
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid var(--glass-border);
-            color: #fff;
-            border-radius: 8px;
-        }
-
-        .btn-action {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
-
-        .btn-blue { background: var(--neon-blue); color: #000; }
-        .btn-purple { background: var(--neon-purple); color: #fff; }
-
-        /* --- VIDEO FEED --- */
-        .video-item {
-            margin-bottom: 25px;
-            padding: 15px;
-        }
-
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-        }
-
-        #login-screen {
-            height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .admin-only { display: none; border: 1px solid red; }
-
+        .admin-only { display:none; border:1px solid red; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">GOAT GLOBAL ADS</div>
-    </header>
+<header>
+    <div class="logo">GOAT GLOBAL ADS</div>
+</header>
 
-    <div class="container">
-        
-        <div id="login-screen" class="section active">
-            <h2 style="margin-bottom: 20px;">BIENVENIDO A LA ÉLITE</h2>
-            <button class="btn-action btn-blue neon-shadow-blue" onclick="loginGoogle()">Ingresar con Google</button>
-        </div>
+<div class="container">
 
-        <div id="inicio" class="section">
-            <div class="glass-card video-item">
-                <h3>Publicar Nuevo Video</h3>
-                <input type="text" id="video-url" placeholder="Pega URL de YouTube o Shorts">
-                <button class="btn-action btn-purple" onclick="publicarVideo()">Subir a la Red</button>
-            </div>
-            <div id="feed-general"></div>
-        </div>
-
-        <div id="shorts" class="section">
-            <h2 style="color: var(--neon-purple); margin-bottom: 15px;">TOP SHORTS</h2>
-            <div id="feed-shorts"></div>
-        </div>
-
-        <div id="panel" class="section">
-            <div class="glass-card" style="padding: 20px; margin-bottom: 20px;">
-                <h3>Mis Estadísticas</h3>
-                <p id="user-info"></p>
-                <p>Saldo Actual: <span id="user-balance" style="color: var(--neon-blue);">$0.00</span></p>
-                <button onclick="logout()" style="background:none; color:red; border:none; cursor:pointer; margin-top:10px;">Cerrar Sesión</button>
-            </div>
-            <h3>Mis Publicaciones</h3>
-            <div id="feed-usuario"></div>
-        </div>
-
-        <div id="director" class="section">
-            <h2 style="color: #ff4d4d; margin-bottom: 20px;">PANEL DIRECTOR</h2>
-            <div class="glass-card" style="padding: 20px;">
-                <h4>Gestión de Balances</h4>
-                <input type="text" id="admin-user-id" placeholder="ID de Usuario (UID)">
-                <input type="number" id="admin-amount" placeholder="Cantidad ($)">
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn-action btn-blue" onclick="ajustarSaldo('sumar')">Sumar</button>
-                    <button class="btn-action btn-purple" onclick="ajustarSaldo('resetear')">Resetear</button>
-                </div>
-            </div>
-        </div>
-
+    <!-- LOGIN / REGISTRO POR EMAIL -->
+    <div id="login-screen" class="section active">
+        <h2 style="margin-bottom:20px;">BIENVENIDO A LA ÉLITE</h2>
+        <input type="email" id="login-email" placeholder="Ingresa tu correo electrónico" required>
+        <button class="btn-action btn-blue neon-shadow-blue" onclick="loginWithEmail()">Enviar enlace de acceso</button>
+        <p style="margin-top:10px; font-size:0.8rem; color:var(--neon-purple);">Revisa tu correo para iniciar sesión.</p>
     </div>
 
-    <nav id="main-nav" style="display: none;">
-        <button onclick="showSection('inicio')" id="btn-inicio">INICIO</button>
-        <button onclick="showSection('shorts')" id="btn-shorts">SHORTS</button>
-        <button onclick="showSection('panel')" id="btn-panel">MI PANEL</button>
-        <button onclick="showSection('director')" id="btn-director" class="admin-only">DIRECTOR</button>
-    </nav>
+    <!-- INICIO -->
+    <div id="inicio" class="section">
+        <div class="glass-card video-item">
+            <h3>Publicar Nuevo Video</h3>
+            <input type="text" id="video-url" placeholder="Pega URL de YouTube o Shorts">
+            <button class="btn-action btn-purple" onclick="publicarVideo()">Subir a la Red</button>
+        </div>
+        <div id="feed-general"></div>
+    </div>
 
-    <script>
-        // --- CONFIGURACIÓN ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyDh_u5eDv_fnSUXiDsHs-iJKZFgtOV3Jgw",
-            authDomain: "flutter-ai-playground-93f86.firebaseapp.com",
-            databaseURL: "https://flutter-ai-playground-93f86-default-rtdb.firebaseio.com/",
-            projectId: "flutter-ai-playground-93f86",
-            storageBucket: "flutter-ai-playground-93f86.firebasestorage.app",
-            messagingSenderId: "912054292680",
-            appId: "1:912054292680:web:80b3c73a7c669a061b95fd"
-        };
-        const ADMIN_EMAIL = "Lethnibel@gmail.com";
+    <!-- SHORTS -->
+    <div id="shorts" class="section">
+        <h2 style="color: var(--neon-purple); margin-bottom: 15px;">TOP SHORTS</h2>
+        <div id="feed-shorts"></div>
+    </div>
 
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.database();
-        const provider = new firebase.auth.GoogleAuthProvider();
+    <!-- PANEL USUARIO -->
+    <div id="panel" class="section">
+        <div class="glass-card">
+            <h3>Mis Estadísticas</h3>
+            <p id="user-info"></p>
+            <p>Saldo Actual: <span id="user-balance" style="color: var(--neon-blue);">$0.00</span></p>
+            <button onclick="logout()" style="background:none; color:red; border:none; cursor:pointer; margin-top:10px;">Cerrar Sesión</button>
+        </div>
+        <h3>Mis Publicaciones</h3>
+        <div id="feed-usuario"></div>
+    </div>
 
-        let currentUser = null;
+    <!-- PANEL DIRECTOR -->
+    <div id="director" class="section">
+        <h2 style="color:#ff4d4d; margin-bottom:20px;">PANEL DIRECTOR</h2>
+        <div class="glass-card">
+            <h4>Gestión de Balances</h4>
+            <input type="text" id="admin-user-id" placeholder="ID de Usuario (UID)">
+            <input type="number" id="admin-amount" placeholder="Cantidad ($)">
+            <div style="display:flex; gap:10px;">
+                <button class="btn-action btn-blue" onclick="ajustarSaldo('sumar')">Sumar</button>
+                <button class="btn-action btn-purple" onclick="ajustarSaldo('resetear')">Resetear</button>
+            </div>
+        </div>
+    </div>
 
-        // --- AUTENTICACIÓN ---
-        function loginGoogle() {
-            auth.signInWithRedirect(provider);
-        }
+</div>
 
-        function logout() {
-            auth.signOut().then(() => location.reload());
-        }
+<nav id="main-nav" style="display:none;">
+    <button onclick="showSection('inicio')" id="btn-inicio">INICIO</button>
+    <button onclick="showSection('shorts')" id="btn-shorts">SHORTS</button>
+    <button onclick="showSection('panel')" id="btn-panel">MI PANEL</button>
+    <button onclick="showSection('director')" id="btn-director" class="admin-only">DIRECTOR</button>
+</nav>
 
-        // Manejo de Persistencia y Redirect
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user;
-                verificarAdmin(user.email);
-                inicializarUsuario(user);
-                showSection('inicio');
-                document.getElementById('main-nav').style.display = 'flex';
-                escucharVideos();
-            } else {
-                showSection('login-screen');
-                document.getElementById('main-nav').style.display = 'none';
-            }
-        });
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyDh_u5eDv_fnSUXiDsHs-iJKZFgtOV3Jgw",
+    authDomain: "flutter-ai-playground-93f86.firebaseapp.com",
+    databaseURL: "https://flutter-ai-playground-93f86-default-rtdb.firebaseio.com/",
+    projectId: "flutter-ai-playground-93f86",
+    storageBucket: "flutter-ai-playground-93f86.firebasestorage.app",
+    messagingSenderId: "912054292680",
+    appId: "1:912054292680:web:80b3c73a7c669a061b95fd"
+};
+const ADMIN_EMAIL = "Lethnibel@gmail.com";
 
-        auth.getRedirectResult().catch(error => console.error("Error en redirect:", error));
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
 
-        function verificarAdmin(email) {
-            if (email === ADMIN_EMAIL) {
-                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
-            }
-        }
+let currentUser = null;
 
-        function inicializarUsuario(user) {
-            const userRef = db.ref('users/' + user.uid);
-            userRef.once('value', snapshot => {
-                if (!snapshot.exists()) {
-                    userRef.set({
-                        nombre: user.displayName,
-                        email: user.email,
-                        saldo: 0,
-                        uid: user.uid
-                    });
-                }
-            });
-            
-            // Listener de saldo en tiempo real
-            userRef.child('saldo').on('value', snap => {
-                document.getElementById('user-balance').innerText = $${snap.val() || 0};
-                document.getElementById('user-info').innerText = ${user.displayName};
-            });
-        }
+// --- LOGIN PASSWORDLESS ---
+function loginWithEmail() {
+    const email = document.getElementById('login-email').value;
+    if (!email) return alert("Ingresa un correo válido");
 
-        // --- LÓGICA DE VIDEOS ---
-        function extraerID(url) {
-            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/;
-            const match = url.match(regex);
-            return (match && match[1]) ? match[1] : null;
-        }
-
-        function publicarVideo() {
-            const url = document.getElementById('video-url').value;
-            const videoId = extraerID(url);
-
-            if (!videoId) return alert("URL de YouTube no válida");
-
-            const newVideoRef = db.ref('videos').push();
-            newVideoRef.set({
-                videoId: videoId,
-                autor: currentUser.displayName,
-                autorId: currentUser.uid,
-                timestamp: Date.now(),
-                tipo: url.includes('shorts') ? 'short' : 'video'
-            }).then(() => {
-                document.getElementById('video-url').value = "";
-                alert("¡Publicado con éxito!");
-            });
-        }
-
-        function escucharVideos() {
-            db.ref('videos').orderByChild('timestamp').on('value', snapshot => {
-                const data = snapshot.val();
-                renderizarFeeds(data);
-            });
-        }
-
-        function renderizarFeeds(data) {
-            const feedGeneral = document.getElementById('feed-general');
-            const feedShorts = document.getElementById('feed-shorts');
-            const feedUsuario = document.getElementById('feed-usuario');
-
-            feedGeneral.innerHTML = "";
-            feedShorts.innerHTML = "";
-            feedUsuario.innerHTML = "";
-
-            if (!data) return;
-
-            Object.values(data).reverse().forEach(v => {
-                const html = `
-                    <div class="glass-card video-item neon-shadow-purple">
-                        <p style="margin-bottom:10px; font-size:0.8rem; color:var(--neon-blue);">Subido por: ${v.autor}</p>
-                        <div class="video-wrapper">
-                            <iframe src="https://www.youtube.com/embed/${v.videoId}" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                    </div>
-                `;
-
-                // Filtro General
-                feedGeneral.insertAdjacentHTML('beforeend', html);
-
-                // Filtro Shorts
-                if (v.tipo === 'short') {
-                    feedShorts.insertAdjacentHTML('beforeend', html);
-                }
-
-                // Filtro Mi Panel (Dueño)
-                if (v.autorId === currentUser.uid) {
-                    feedUsuario.insertAdjacentHTML('beforeend', html);
-                }
-            });
-        }
-
-        // --- PANEL DIRECTOR ---
-        function ajustarSaldo(accion) {
-            const targetUid = document.getElementById('admin-user-id').value;
-            const monto = parseFloat(document.getElementById('admin-amount').value);
-
-            if (!targetUid) return alert("Ingresa un UID");
-
-            const userRef = db.ref('users/' + targetUid + '/saldo');
-
-            userRef.transaction(currentSaldo => {
-                if (accion === 'sumar') {
-                    return (currentSaldo || 0) + monto;
-                } else {
-                    return 0;
-                }
-            }).then(() => alert("Transacción completada"));
-        }
-
-        // --- NAVEGACIÓN SPA ---
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-            const btn = document.getElementById('btn-' + sectionId);
-            if (btn) btn.classList.add('active');
-        }
-
-    </script>
-</body>
-</html>
+    const actionCodeSettings = { url: window.location
