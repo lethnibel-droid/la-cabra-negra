@@ -2,209 +2,255 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>GOAT GLOBAL ADS | Lethnibel Ordóñez</title>
     <style>
-        /* CONFIGURACIÓN DE IDENTIDAD ORDÓÑEZ */
         :root {
             --bg-dark: #000000;
-            --neon-diamond: #00ffff; /* Cian Diamante */
-            --neon-gold: #d4af37;    /* Oro Elite */
-            --glass: rgba(255, 255, 255, 0.05);
-            --font-main: 'Inter', 'Segoe UI', sans-serif;
+            --neon-diamond: #00ffff;
+            --glass: rgba(255, 255, 255, 0.08);
+            --yt-red: #ff0000;
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body, html {
             background-color: var(--bg-dark);
             color: white;
-            font-family: var(--font-main);
+            font-family: 'Roboto', -apple-system, sans-serif;
             margin: 0; padding: 0;
-            overflow: hidden; /* Bloquear scroll durante la carga */
+            width: 100%; height: 100%;
+            overflow: hidden;
         }
 
-        /* --- PANTALLA DE CARGA (LOADER) --- */
+        /* --- LOADER DIAMANTE --- */
         #loader {
-            position: fixed; inset: 0; 
-            background: var(--bg-dark);
-            z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 1; transition: opacity 0.8s ease;
+            position: fixed; inset: 0; background: var(--bg-dark);
+            z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-
-        /* Diamante Vectorial Intermitente */
-        .diamond-icon {
-            width: 80px; height: 80px;
-            fill: none; stroke: var(--neon-diamond);
-            stroke-width: 1.5;
-            filter: drop-shadow(0 0 15px var(--neon-diamond));
-            /* Animación Intermitente */
-            animation: diamondPulse 1.2s infinite ease-in-out;
+        .diamond-svg {
+            width: 80px; height: 80px; fill: none; stroke: var(--neon-diamond);
+            stroke-width: 1.5; animation: blink 1.2s infinite ease-in-out;
         }
+        @keyframes blink { 0%, 100% { opacity: 0.1; filter: drop-shadow(0 0 2px var(--neon-diamond)); } 50% { opacity: 1; filter: drop-shadow(0 0 20px var(--neon-diamond)); } }
 
-        /* Lógica del Brillo Intermitente */
-        @keyframes diamondPulse {
-            0%, 100% { opacity: 0.2; filter: drop-shadow(0 0 2px var(--neon-diamond)); }
-            50% { opacity: 1; filter: drop-shadow(0 0 20px var(--neon-diamond)); }
-        }
+        /* --- ESTRUCTURA APP --- */
+        #main-app { display: none; opacity: 0; transition: opacity 0.6s ease; height: 100vh; display: flex; flex-direction: column; }
 
-        /* --- UI PRINCIPAL (Oculta al inicio) --- */
-        #main-content {
-            opacity: 0; transition: opacity 1s ease;
-            padding-bottom: 90px;
-        }
-
-        /* --- HEADER ELITE --- */
+        /* BARRA SUPERIOR (HEADER ESTILO YOUTUBE) */
         header {
-            position: sticky; top: 0; z-index: 1000;
-            background: rgba(0,0,0,0.95);
-            padding: 15px 20px;
+            padding: 10px 15px; background: #0f0f0f;
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000;
+        }
+        .logo-text { font-weight: 900; letter-spacing: 1px; color: white; display: flex; align-items: center; gap: 8px; }
+        .logo-text span { color: var(--neon-diamond); }
+
+        /* ÁREA DE CONTENIDO */
+        .content-area { flex: 1; overflow-y: auto; padding-bottom: 90px; -webkit-overflow-scrolling: touch; }
+        .view-section { display: none; padding: 10px; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* GRID DE VIDEOS ESTILO YOUTUBE */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+            gap: 20px;
         }
 
-        .brand-box { display: flex; align-items: center; gap: 10px; }
-        .brand-box span { font-weight: 800; letter-spacing: 1px; font-size: 1.1rem; color: white; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        
-        .logo-diamond-header {
-            width: 25px; height: 25px;
-            fill: none; stroke: var(--neon-diamond);
-            stroke-width: 2; filter: drop-shadow(0 0 5px var(--neon-diamond));
+        .yt-card { width: 100%; margin-bottom: 10px; }
+        .thumbnail-box {
+            position: relative; width: 100%; aspect-ratio: 16/9;
+            background: #1a1a1a; border-radius: 12px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
         }
+        .video-info { display: flex; gap: 12px; padding: 12px 5px; }
+        .channel-avatar { width: 36px; height: 36px; background: #333; border-radius: 50%; flex-shrink: 0; }
+        .info-text h3 { margin: 0; font-size: 14px; font-weight: 500; line-height: 1.4; color: #fff; }
+        .info-text p { margin: 4px 0 0; font-size: 12px; color: #aaa; }
 
-        /* --- CARDS DE CRISTAL --- */
-        .ad-card {
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            margin: 20px; padding: 15px;
-            position: relative;
+        /* BOTONES DE ACCIÓN (AUTO-LIKE & SUB) */
+        .action-bar { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-yt-action {
+            flex: 1; background: #272727; border: none; color: white;
+            padding: 8px; border-radius: 20px; font-size: 12px; font-weight: 500;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
         }
+        .btn-yt-action:active { background: #3f3f3f; }
 
-        .video-box { 
-            width: 100%; aspect-ratio: 16/9; background: #080808; 
-            border-radius: 12px; overflow: hidden; border: 1px solid #222;
-        }
-        iframe { width: 100%; height: 100%; border: none; }
-
-        .verified-badge {
-            background: linear-gradient(90deg, var(--neon-diamond), var(--neon-gold));
-            color: black; font-size: 0.65rem; font-weight: 900;
-            padding: 5px 10px; border-radius: 50px; text-transform: uppercase;
-            position: absolute; top: 25px; right: 25px;
-        }
-
-        /* --- INTERACCIÓN --- */
-        .actions-bar { display: flex; justify-content: space-around; margin-top: 15px; }
-        .btn-neon {
-            background: none; border: none; color: white;
-            display: flex; align-items: center; gap: 8px;
-            cursor: pointer; transition: 0.3s; font-size: 0.9rem;
-        }
-        .btn-neon:active { transform: scale(0.9); color: var(--neon-diamond); }
-
-        /* --- BARRA INFERIOR ORDÓÑEZ EDITION --- */
+        /* BARRA DE NAVEGACIÓN INFERIOR */
         nav {
-            position: fixed; bottom: 0; width: 100%; height: 80px;
-            background: #050505; display: flex; justify-content: space-around;
-            align-items: center; border-top: 1px solid #222; z-index: 1000;
+            position: fixed; bottom: 0; width: 100%; height: 70px;
+            background: rgba(15,15,15,0.98); backdrop-filter: blur(10px);
+            display: flex; justify-content: space-around; align-items: center;
+            border-top: 1px solid #222; padding-bottom: env(safe-area-inset-bottom);
+            z-index: 1000;
         }
-
-        .nav-link { text-align: center; opacity: 0.4; transition: 0.3s; cursor: pointer; color: white; }
-        .nav-link.active { opacity: 1; color: var(--neon-diamond); }
-        .nav-link i { font-size: 1.5rem; display: block; }
-
-        /* Botón Central Diamante (+) */
-        .btn-plus-diamond {
-            background: white; color: black;
-            width: 55px; height: 55px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.2rem; font-weight: bold; margin-top: -35px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
-            position: relative; overflow: hidden;
-        }
+        .nav-item { text-align: center; color: #888; font-size: 10px; transition: 0.3s; }
+        .nav-item.active { color: white; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; font-style: normal; }
         
-        .logo-diamond-btn {
-            width: 30px; height: 30px;
-            fill: none; stroke: #000000;
-            stroke-width: 2; transition: 0.3s;
+        /* BOTÓN DIAMANTE (CENTRO) */
+        .btn-diamond-main {
+            width: 48px; height: 48px; background: #222; border: 2px solid var(--neon-diamond);
+            border-radius: 50%; margin-top: -30px; display: flex;
+            justify-content: center; align-items: center;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
         }
 
-        .btn-plus-diamond:active .logo-diamond-btn {
-            stroke: var(--neon-diamond);
-            filter: drop-shadow(0 0 5px var(--neon-diamond));
+        /* MODAL DE PUBLICACIÓN */
+        #modal-pub {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.95); z-index: 5000;
+            flex-direction: column; justify-content: center; padding: 30px;
         }
-
+        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 15px; border-radius: 12px; width: 100%; margin-bottom: 15px; }
+        .btn-pub { background: white; color: black; font-weight: bold; padding: 15px; border-radius: 12px; border: none; }
     </style>
 </head>
-<body onclick="hideLoader()"> <div id="loader">
-        <svg class="diamond-icon" viewBox="0 0 24 24">
+<body>
+
+    <div id="loader">
+        <svg class="diamond-svg" viewBox="0 0 24 24">
             <path d="M12 2L2 12l10 10 10-10L12 2zM12 4.12L19.88 12 12 19.88 4.12 12 12 4.12zM12 7.5L8.5 12 12 16.5 15.5 12 12 7.5z"/>
         </svg>
     </div>
 
-    <div id="main-content">
+    <div id="main-app">
         <header>
-            <div class="brand-box">
-                <svg class="logo-diamond-header" viewBox="0 0 24 24">
-                    <path d="M12 2L2 12l10 10 10-10L12 2zM12 4.12L19.88 12 12 19.88 4.12 12 12 4.12zM12 7.5L8.5 12 12 16.5 15.5 12 12 7.5z"/>
-                </svg>
-                <span>GOAT GLOBAL ADS</span>
+            <div class="logo-text">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--neon-diamond)"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
+                GOAT <span>GLOBAL ADS</span>
             </div>
-            <div style="font-size: 1.2rem; display: flex; gap: 15px; opacity: 0.7;">
+            <div style="display: flex; gap: 15px;">
                 <span>🔔</span>
                 <span>🔍</span>
+                <span onclick="navegar('perfil', document.getElementById('nav-tu'))">👤</span>
             </div>
         </header>
 
-        <section id="inicio" class="view active" style="display:block; padding:20px;">
-            <div id="feed-container">
-                <div class="ad-card glass">
-                    <div class="verified-badge">Global Verified</div>
-                    <div class="video-box">
-                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe>
-                    </div>
-                    <div class="actions-bar">
-                        <button class="btn-neon">💎 Like</button>
-                        <button class="btn-neon" onclick="alert('ROI: 5.2%')">📊 ROI</button>
-                        <button class="btn-neon" onclick="alert('Enlace copiado')">🔗 Share</button>
+        <div class="content-area">
+            <section id="inicio" class="view-section active">
+                <div class="video-grid" id="feed">
+                    <div class="yt-card">
+                        <div class="thumbnail-box">
+                            <iframe id="player-1" src="https://www.youtube.com/embed/S9uTsc_S288?enablejsapi=1" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-info">
+                            <div class="channel-avatar" style="background: url('https://via.placeholder.com/36')"></div>
+                            <div class="info-text">
+                                <h3>ESTRATEGIA GOAT 2026 - LETHNIBEL ORDÓÑEZ</h3>
+                                <p>GOAT Ads • 1.2M vistas • hace 2 horas</p>
+                                <div class="action-bar">
+                                    <button class="btn-yt-action" onclick="doAutoAction('Like')">💎 Like</button>
+                                    <button class="btn-yt-action" onclick="doAutoAction('Suscripción')">🔴 Suscribirse</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <section id="perfil" class="view-section">
+                <div style="text-align: center; padding: 30px 0;">
+                    <div style="width: 90px; height: 90px; border-radius: 50%; background: #222; margin: 0 auto; border: 2px solid var(--neon-diamond); font-size: 40px; display: flex; align-items: center; justify-content: center;">L</div>
+                    <h2 style="margin: 15px 0 5px;">Lethnibel Ordóñez</h2>
+                    <p style="color: #888; font-size: 13px;">@LethnibelOrdonez-x9r9d</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px;">
+                    <div style="background: #111; padding: 15px; border-radius: 15px; text-align: center;">
+                        <span style="font-size: 20px; font-weight: bold; color: var(--neon-diamond);">450</span>
+                        <p style="font-size: 11px; margin: 5px 0 0; color: #666;">Vistas Generadas</p>
+                    </div>
+                    <div style="background: #111; padding: 15px; border-radius: 15px; text-align: center;">
+                        <span style="font-size: 20px; font-weight: bold; color: #00ff00;">$12.50</span>
+                        <p style="font-size: 11px; margin: 5px 0 0; color: #666;">Saldo Acumulado</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="modal-pub">
+            <h2 style="margin-bottom: 5px;">Nueva Campaña</h2>
+            <p style="color: #666; font-size: 14px; margin-bottom: 25px;">Pega el link de YouTube para generar vistas reales.</p>
+            <input type="text" id="video-url" placeholder="https://www.youtube.com/watch?v=...">
+            <button class="btn-pub" onclick="publicar()">EMPEZAR CAMPAÑA</button>
+            <p onclick="cerrarModal()" style="text-align: center; margin-top: 20px; opacity: 0.5;">Cancelar</p>
+        </div>
 
         <nav>
-            <div class="nav-link active"><i>🏠</i>Inicio</div>
-            <div class="nav-link"><i>🔥</i>Trends</div>
-            <div class="btn-plus-diamond">
-                <svg class="logo-diamond-btn" viewBox="0 0 24 24">
-                    <path d="M12 2L2 12l10 10 10-10L12 2zM12 4.12L19.88 12 12 19.88 4.12 12 12 4.12zM12 7.5L8.5 12 12 16.5 15.5 12 12 7.5z"/>
-                </svg>
+            <div class="nav-item active" onclick="navegar('inicio', this)"><i>🏠</i>Inicio</div>
+            <div class="nav-item" onclick="alert('Explorar tendencias')"><i>🔥</i>Shorts</div>
+            <div class="btn-diamond-main" onclick="abrirModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--neon-diamond)"><path d="M12 2L2 12l10 10 10-10L12 2z"/></svg>
             </div>
-            <div class="nav-link"><i>🕒</i>Historial</div>
-            <div class="nav-link"><i>👤</i>Tú</div>
+            <div class="nav-item" onclick="alert('Historial de reproducciones')"><i>🕒</i>Historial</div>
+            <div id="nav-tu" class="nav-item" onclick="navegar('perfil', this)"><i>👤</i>Tú</div>
         </nav>
     </div>
 
     <script>
-        // Función para ocultar la carga y mostrar la UI
-        function hideLoader() {
-            const loader = document.getElementById('loader');
-            const content = document.getElementById('main-content');
-            
-            // Efecto de desvanecimiento
-            loader.style.opacity = '0';
-            content.style.opacity = '1';
-            
-            // Permitir scroll y quitar loader del DOM tras la animación
+        // CARGA AUTOMÁTICA CON DIAMANTE
+        window.addEventListener('load', () => {
             setTimeout(() => {
-                loader.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }, 800);
+                document.getElementById('loader').style.opacity = '0';
+                const app = document.getElementById('main-app');
+                app.style.display = 'flex';
+                setTimeout(() => {
+                    app.style.opacity = '1';
+                    document.getElementById('loader').style.display = 'none';
+                }, 50);
+            }, 2500);
+        });
+
+        // NAVEGACIÓN ENTRE SECCIONES (SPA)
+        function navegar(id, elemento) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            elemento.classList.add('active');
         }
 
-        // Simular carga automática tras 3 segundos (opcional)
-        // window.onload = () => setTimeout(hideLoader, 3000);
+        // LÓGICA DE PUBLICACIÓN (NO ALMACENA VIDEO, SOLO URL)
+        function abrirModal() { document.getElementById('modal-pub').style.display = 'flex'; }
+        function cerrarModal() { document.getElementById('modal-pub').style.display = 'none'; }
+
+        function publicar() {
+            const url = document.getElementById('video-url').value;
+            if(!url) return alert("Ingresa una URL válida");
+
+            // Extraer ID de YouTube
+            let id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
+            
+            const card = document.createElement('div');
+            card.className = "yt-card";
+            card.innerHTML = `
+                <div class="thumbnail-box">
+                    <iframe src="https://www.youtube.com/embed/${id}?enablejsapi=1" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <div class="channel-avatar"></div>
+                    <div class="info-text">
+                        <h3>NUEVA CAMPAÑA: ${id}</h3>
+                        <p>Usuario GOAT • 0 vistas • Recién publicado</p>
+                        <div class="action-bar">
+                            <button class="btn-yt-action" onclick="doAutoAction('Like')">💎 Like</button>
+                            <button class="btn-yt-action" onclick="doAutoAction('Suscripción')">🔴 Suscribirse</button>
+                        </div>
+                    </div>
+                </div>`;
+            
+            document.getElementById('feed').prepend(card);
+            cerrarModal();
+            document.getElementById('video-url').value = "";
+            navegar('inicio', document.querySelectorAll('.nav-item')[0]);
+        }
+
+        // FUNCIÓN DE AUTO-LIKE / AUTO-SUB (SIMULACIÓN DE API)
+        function doAutoAction(tipo) {
+            alert(Sincronizando ${tipo} con YouTube... Accion realizada desde la cuenta de Lethnibel Ordóñez);
+        }
     </script>
 </body>
 </html>
