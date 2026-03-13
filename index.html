@@ -1,57 +1,96 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOAT GLOBAL ADS - PRO</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOAT GLOBAL ADS - PRO</title>
 
-    <style>
-        :root {
-            --neon-blue: #00f2ff;
-            --neon-purple: #bc13fe;
-            --bg-dark: #000000;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #ffffff;
-        }
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
 
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Roboto, sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-main); overflow-x:hidden; min-height:100vh; }
+<style>
+:root {
+    --neon-blue: #00f2ff;
+    --neon-purple: #bc13fe;
+    --neon-red: #ff4d4d;
+    --bg-dark: #0a0a0a;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --text-main: #ffffff;
+    --transition-fast: 0.3s;
+}
 
-        .glass-card { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border:1px solid var(--glass-border); border-radius:15px; box-shadow:0 8px 32px 0 rgba(0,0,0,0.8); padding:15px; margin-bottom:20px; }
-        .neon-shadow-blue { box-shadow:0 0 15px var(--neon-blue); }
-        .neon-shadow-purple { box-shadow:0 0 15px var(--neon-purple); }
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Roboto, sans-serif; }
+body { background: var(--bg-dark); color: var(--text-main); min-height:100vh; overflow-x:hidden; }
+h2,h3,h4 { font-weight:500; margin-bottom:10px; }
 
-        header { padding:20px; text-align:center; border-bottom:1px solid var(--neon-blue); margin-bottom:20px; }
-        .logo { font-size:1.8rem; font-weight:bold; text-transform:uppercase; letter-spacing:3px; color: var(--neon-blue); text-shadow:0 0 10px var(--neon-blue); }
+header {
+    padding:20px; text-align:center; border-bottom:1px solid var(--neon-blue);
+}
+.logo {
+    font-size:2rem; font-weight:bold; color: var(--neon-blue);
+    text-transform:uppercase; letter-spacing:3px;
+    text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+}
 
-        nav { position:fixed; bottom:0; width:100%; display:flex; justify-content:space-around; padding:15px; background:rgba(0,0,0,0.9); border-top:1px solid var(--neon-purple); z-index:1000; }
-        nav button { background:none; border:none; color:#fff; font-size:0.8rem; cursor:pointer; transition:0.3s; }
-        nav button.active { color: var(--neon-blue); text-shadow:0 0 8px var(--neon-blue); }
+.container { padding:20px; padding-bottom:120px; max-width:800px; margin:0 auto; }
 
-        .container { padding:20px; padding-bottom:100px; max-width:800px; margin:0 auto; }
+.glass-card {
+    background: var(--glass-bg);
+    border:1px solid var(--glass-border);
+    border-radius:15px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+    padding:20px;
+    margin-bottom:25px;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.glass-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.9); }
 
-        .section { display:none; }
-        .section.active { display:block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+input, select {
+    width:100%; padding:12px; margin:10px 0;
+    background: rgba(255,255,255,0.1); border:1px solid var(--glass-border);
+    color:#fff; border-radius:10px;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+input:focus { border-color: var(--neon-blue); background: rgba(0,0,0,0.2); outline:none; }
 
-        input, select { width:100%; padding:12px; margin:10px 0; background: rgba(255,255,255,0.1); border:1px solid var(--glass-border); color:#fff; border-radius:8px; }
-        .btn-action { width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; text-transform:uppercase; margin-top:10px; }
-        .btn-blue { background: var(--neon-blue); color:#000; }
-        .btn-purple { background: var(--neon-purple); color:#fff; }
+.btn-action {
+    width:100%; padding:15px; border:none; border-radius:10px;
+    font-weight:bold; text-transform:uppercase; cursor:pointer;
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+.btn-action:hover { transform: translateY(-3px); box-shadow:0 0 15px var(--neon-blue); }
 
-        .video-item { margin-bottom:25px; padding:15px; }
-        .video-wrapper { position:relative; padding-bottom:56.25%; height:0; border-radius:10px; overflow:hidden; }
-        .video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; }
+.btn-blue { background: var(--neon-blue); color:#000; }
+.btn-purple { background: var(--neon-purple); color:#fff; }
 
-        #login-screen { height:80vh; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+.video-item { margin-bottom:25px; }
+.video-wrapper { position:relative; padding-bottom:56.25%; height:0; border-radius:10px; overflow:hidden; }
+.video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:10px; }
 
-        .admin-only { display:none; border:1px solid red; }
-    </style>
+#login-screen { height:80vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
+
+nav {
+    position:fixed; bottom:0; width:100%;
+    display:flex; justify-content:space-around;
+    padding:15px; background: rgba(0,0,0,0.9);
+    border-top:1px solid var(--neon-purple); z-index:1000;
+}
+nav button { background:none; border:none; color:#fff; font-size:0.9rem; cursor:pointer; transition:0.3s; }
+nav button.active { color: var(--neon-blue); text-shadow:0 0 8px var(--neon-blue); }
+
+.section { display:none; }
+.section.active { display:block; animation: fadeIn 0.5s ease; }
+@keyframes fadeIn { from {opacity:0} to {opacity:1} }
+
+.admin-only { display:none; }
+
+p { font-size:0.9rem; color:#ccc; }
+</style>
 </head>
 <body>
 
@@ -61,12 +100,12 @@
 
 <div class="container">
 
-    <!-- LOGIN / REGISTRO POR EMAIL -->
+    <!-- LOGIN -->
     <div id="login-screen" class="section active">
-        <h2 style="margin-bottom:20px;">BIENVENIDO A LA ÉLITE</h2>
+        <h2>Bienvenido a la Élite</h2>
         <input type="email" id="login-email" placeholder="Ingresa tu correo electrónico" required>
-        <button class="btn-action btn-blue neon-shadow-blue" onclick="loginWithEmail()">Enviar enlace de acceso</button>
-        <p style="margin-top:10px; font-size:0.8rem; color:var(--neon-purple);">Revisa tu correo para iniciar sesión.</p>
+        <button class="btn-action btn-blue" onclick="loginWithEmail()">Enviar enlace de acceso</button>
+        <p>Revisa tu correo para iniciar sesión.</p>
     </div>
 
     <!-- INICIO -->
@@ -99,7 +138,7 @@
 
     <!-- PANEL DIRECTOR -->
     <div id="director" class="section">
-        <h2 style="color:#ff4d4d; margin-bottom:20px;">PANEL DIRECTOR</h2>
+        <h2 style="color: var(--neon-red); margin-bottom:20px;">PANEL DIRECTOR</h2>
         <div class="glass-card">
             <h4>Gestión de Balances</h4>
             <input type="text" id="admin-user-id" placeholder="ID de Usuario (UID)">
@@ -128,19 +167,4 @@ const firebaseConfig = {
     projectId: "flutter-ai-playground-93f86",
     storageBucket: "flutter-ai-playground-93f86.firebasestorage.app",
     messagingSenderId: "912054292680",
-    appId: "1:912054292680:web:80b3c73a7c669a061b95fd"
-};
-const ADMIN_EMAIL = "Lethnibel@gmail.com";
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
-
-let currentUser = null;
-
-// --- LOGIN PASSWORDLESS ---
-function loginWithEmail() {
-    const email = document.getElementById('login-email').value;
-    if (!email) return alert("Ingresa un correo válido");
-
-    const actionCodeSettings = { url: window.location
+    appId: "1:912054292680:web:80b3c73a7c669a061b95
