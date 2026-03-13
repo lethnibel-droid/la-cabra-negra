@@ -3,342 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>GOAT GLOBAL ADS</title>
+    <title>GOAT GLOBAL ADS | Premium</title>
     <style>
         :root {
-            --bg-black: #0f0f0f;
+            --glass-bg: rgba(25, 25, 25, 0.75);
             --neon-cyan: #00ffff;
-            --yt-red: #ff0000;
-            --gray-chip: #272727;
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body, html {
             margin: 0; padding: 0;
-            background-color: #000;
-            color: white;
-            font-family: 'Roboto', sans-serif;
-            height: 100%;
-            overflow: hidden;
+            background: radial-gradient(circle at top, #1a1a1a, #000);
+            color: white; font-family: 'Roboto', sans-serif;
+            height: 100vh; overflow: hidden;
         }
 
-        /* --- CONTENEDOR PRINCIPAL --- */
-        #main-wrapper {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        /* --- HEADER (Basado en tu imagen) --- */
+        /* --- EFECTO GLASS EN HEADER --- */
         header {
-            background: var(--bg-black);
-            padding: 10px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #222;
-            z-index: 100;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky; top: 0; z-index: 1000;
         }
 
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 900;
-            font-size: 18px;
-            letter-spacing: -0.5px;
+        .logo { font-weight: 900; letter-spacing: 1px; text-shadow: 0 0 10px var(--neon-cyan); }
+        .logo span { color: var(--neon-cyan); }
+
+        .icons i { margin-left: 20px; font-size: 18px; cursor: pointer; transition: 0.3s; }
+        .icons i:hover { color: var(--neon-cyan); }
+
+        /* --- CHIPS CON BRILLO --- */
+        .chips {
+            display: flex; gap: 10px; padding: 15px; overflow-x: auto;
+            background: rgba(0,0,0,0.5);
         }
-
-        .logo-area span { color: var(--neon-cyan); }
-
-        .header-tools {
-            display: flex;
-            gap: 20px;
-            font-size: 20px;
-        }
-
-        /* --- BUSCADOR DESPLEGABLE --- */
-        #search-bar {
-            display: none;
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 60px;
-            background: var(--bg-black);
-            z-index: 200;
-            align-items: center;
-            padding: 0 15px;
-        }
-
-        #search-bar input {
-            flex: 1;
-            background: #222;
-            border: 1px solid #333;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 20px;
-            outline: none;
-        }
-
-        /* --- CATEGORÍAS (CHIPS) --- */
-        .chips-container {
-            display: flex;
-            gap: 10px;
-            padding: 12px;
-            overflow-x: auto;
-            background: var(--bg-black);
-            border-bottom: 1px solid #222;
-        }
-
-        .chips-container::-webkit-scrollbar { display: none; }
-
+        .chips::-webkit-scrollbar { display: none; }
         .chip {
-            background: var(--gray-chip);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            white-space: nowrap;
-            cursor: pointer;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 8px 18px; border-radius: 20px;
+            font-size: 13px; white-space: nowrap; cursor: pointer;
         }
+        .chip.active { background: white; color: black; box-shadow: 0 0 15px white; }
 
-        .chip.active { background: white; color: black; }
+        /* --- CONTENIDO PRINCIPAL --- */
+        .app-content { height: calc(100vh - 145px); overflow-y: auto; padding-bottom: 100px; }
+        .page { display: none; width: 100%; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
 
-        /* --- ÁREA DE CONTENIDO (SCROLLABLE) --- */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 80px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .view { display: none; width: 100%; }
-        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- TARJETAS DE VIDEO --- */
-        .video-card { width: 100%; margin-bottom: 15px; }
-        .player-wrap {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #111;
-        }
+        .video-card { width: 95%; margin: 0 auto 20px; background: var(--glass-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--glass-border); }
+        .video-frame { width: 100%; aspect-ratio: 16/9; background: #000; }
         iframe { width: 100%; height: 100%; border: none; }
+        .info { padding: 15px; display: flex; gap: 12px; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(45deg, #333, var(--neon-cyan)); }
 
-        .video-details {
-            display: flex;
-            gap: 12px;
-            padding: 12px;
-        }
-
-        .v-avatar {
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            background: var(--gray-chip);
-            flex-shrink: 0;
-        }
-
-        .v-text h3 { margin: 0; font-size: 14px; font-weight: 500; line-height: 1.4; }
-        .v-text p { margin: 4px 0 0; font-size: 12px; color: #aaa; }
-
-        /* --- BARRA DE NAVEGACIÓN (BLINDADA) --- */
+        /* --- NAV INFERIOR GLASS --- */
         nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 65px;
-            background: var(--bg-black);
-            border-top: 1px solid #222;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 500;
+            position: fixed; bottom: 0; width: 100%; height: 75px;
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 2000; padding-bottom: 15px;
         }
+        .nav-btn { text-align: center; color: #888; flex: 1; cursor: pointer; transition: 0.3s; }
+        .nav-btn.active { color: white; text-shadow: 0 0 8px white; }
+        .nav-btn b { display: block; font-size: 22px; font-style: normal; margin-bottom: 2px; }
 
-        .nav-btn {
-            text-align: center;
-            color: #aaa;
-            font-size: 10px;
-            flex: 1;
-            cursor: pointer;
-            padding: 10px 0;
-        }
-
-        .nav-btn.active { color: white; }
-        .nav-btn i { font-size: 22px; display: block; margin-bottom: 4px; font-style: normal; }
-
-        .add-circle {
-            width: 45px; height: 45px;
-            border: 2px solid var(--neon-cyan);
-            border-radius: 50%;
+        .btn-main {
+            width: 50px; height: 50px; background: #000;
+            border: 2px solid var(--neon-cyan); border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
-            font-size: 28px;
-            color: white;
-            margin-top: -30px;
-            background: #000;
+            font-size: 30px; margin-top: -35px; box-shadow: 0 0 20px rgba(0,255,255,0.4);
         }
 
-        /* --- MODAL PUBLICAR --- */
-        #pub-modal {
-            display: none;
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.98);
-            z-index: 1000;
-            flex-direction: column;
-            justify-content: center;
-            padding: 30px;
+        /* BUSCADOR */
+        #search-box {
+            display: none; position: fixed; top: 0; width: 100%; height: 70px;
+            background: #000; z-index: 3000; align-items: center; padding: 0 20px;
         }
-        #pub-modal input {
-            background: #1a1a1a; border: 1px solid #333; color: white;
-            padding: 15px; border-radius: 12px; width: 100%; margin-bottom: 15px;
-        }
+        #search-box input { flex: 1; background: #222; border: 1px solid var(--neon-cyan); color: white; padding: 12px; border-radius: 25px; outline: none; }
     </style>
 </head>
 <body>
 
-    <div id="main-wrapper">
-        
-        <div id="search-bar">
-            <span onclick="toggleSearch()" style="margin-right:15px; font-size:20px;">←</span>
-            <input type="text" id="searchInput" placeholder="Buscar en GOAT Global..." onkeypress="if(event.key==='Enter') executeSearch()">
-            <i onclick="executeSearch()" style="margin-left:15px;">🔍</i>
-        </div>
-
-        <header>
-            <div class="logo-area">
-                💎 GOAT <span>GLOBAL ADS</span>
-            </div>
-            <div class="header-tools">
-                <i onclick="alert('Transmitiendo...')">📺</i>
-                <i onclick="alert('Notificaciones')">🔔</i>
-                <i onclick="toggleSearch()">🔍</i>
-            </div>
-        </header>
-
-        <div class="chips-container">
-            <div class="chip active" onclick="executeSearch('Estrategias Lethnibel')">Todo</div>
-            <div class="chip" onclick="executeSearch('Nuevos Negocios')">Novedad</div>
-            <div class="chip" onclick="executeSearch('Marketing Digital')">Marketing</div>
-            <div class="chip" onclick="executeSearch('VIP')">VIP</div>
-        </div>
-
-        <div class="main-content">
-            <section id="view-inicio" class="view active">
-                <div id="video-feed">
-                    </div>
-            </section>
-
-            <section id="view-perfil" class="view">
-                <div style="text-align: center; padding: 40px 20px;">
-                    <div style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--neon-cyan); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; background: #222;">L</div>
-                    <h2 style="margin:0;">Lethnibel Ordóñez</h2>
-                    <p style="color:#888;">Director Ejecutivo</p>
-                    
-                    <div style="background:#111; padding:25px; border-radius:15px; margin-top:30px; border:1px solid #222;">
-                        <p style="font-size:11px; color:#aaa; letter-spacing:1px;">SALDO ACUMULADO</p>
-                        <h3 style="color:#00ff00; font-size:32px; margin:10px 0;">$1,250.00</h3>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <div id="pub-modal">
-            <h2 style="text-align:center;">Lanzar Campaña</h2>
-            <input type="text" id="yt-url" placeholder="Pega el link de YouTube aquí">
-            <button onclick="publish()" style="width:100%; background:white; color:black; padding:15px; border-radius:10px; font-weight:bold; border:none;">PUBLICAR</button>
-            <p onclick="closeModal()" style="text-align:center; margin-top:20px; opacity:0.5;">Cancelar</p>
-        </div>
-
-        <nav>
-            <div class="nav-btn active" onclick="switchTab('view-inicio', this)"><i>🏠</i>Inicio</div>
-            <div class="nav-btn" onclick="alert('Shorts en camino')"><i>🔥</i>Shorts</div>
-            
-            <div class="add-circle" onclick="openModal()">+</div>
-            
-            <div class="nav-btn" onclick="alert('Historial de vistas')"><i>🕒</i>Suscripciones</div>
-            <div class="nav-btn" onclick="switchTab('view-perfil', this)"><i>👤</i>Tú</div>
-        </nav>
-
+    <div id="search-box">
+        <input type="text" id="in-search" placeholder="Buscar en YouTube..." onkeypress="if(event.key==='Enter') doSearch()">
+        <span onclick="toggleS()" style="margin-left:15px; cursor:pointer;">✖</span>
     </div>
 
+    <header>
+        <div class="logo">💎 GOAT <span>GLOBAL ADS</span></div>
+        <div class="icons">
+            <i onclick="alert('Iniciando Streaming...')">📺</i>
+            <i onclick="alert('No tienes notificaciones nuevas')">🔔</i>
+            <i onclick="toggleS()">🔍</i>
+        </div>
+    </header>
+
+    <div class="chips">
+        <div class="chip active" onclick="doSearch('Estrategias Digitales')">Todo</div>
+        <div class="chip" onclick="doSearch('Musica Tendencia')">Música</div>
+        <div class="chip" onclick="doSearch('VIP Business')">VIP</div>
+        <div class="chip" onclick="doSearch('Emprendimiento')">Novedad</div>
+    </div>
+
+    <div class="app-content">
+        <section id="p-inicio" class="page active">
+            <div id="feed"></div>
+        </section>
+
+        <section id="p-shorts" class="page">
+            <div style="height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px;">
+                <div>
+                    <h2>🔥 GOAT SHORTS</h2>
+                    <div class="video-card" style="aspect-ratio: 9/16; width: 280px;">
+                        <iframe src="https://www.youtube.com/embed?listType=search&list=shorts+trending"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="p-perfil" class="page">
+            <div style="padding: 40px 20px; text-align: center;">
+                <div style="width:100px; height:100px; border:3px solid var(--neon-cyan); border-radius:50%; margin: 0 auto 20px; display:flex; align-items:center; justify-content:center; font-size:40px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);">L</div>
+                <h2 style="margin:0;">Lethnibel Ordóñez</h2>
+                <p style="color: var(--neon-cyan);">Director Ejecutivo</p>
+                
+                <div style="margin-top:30px; background: var(--glass-bg); padding:30px; border-radius:20px; border: 1px solid var(--glass-border); backdrop-filter: blur(15px);">
+                    <p style="font-size:12px; color:#aaa;">BALANCE DISPONIBLE</p>
+                    <h1 style="color:#00ff00; font-size:42px; margin:10px 0;">$1,250.00</h1>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <nav>
+        <div class="nav-btn active" onclick="tab('p-inicio', this)"><b>🏠</b>Inicio</div>
+        <div class="nav-btn" onclick="tab('p-shorts', this)"><b>🔥</b>Shorts</div>
+        <div class="btn-main" onclick="alert('Sube tu video aquí')">+</div>
+        <div class="nav-item nav-btn" onclick="doSearch('Suscripciones')"><b>🕒</b>Historial</div>
+        <div class="nav-btn" onclick="tab('p-perfil', this)"><b>👤</b>Tú</div>
+    </nav>
+
     <script>
-        // --- LÓGICA DE NAVEGACIÓN ---
-        function switchTab(viewId, element) {
-            // Ocultar todas las vistas
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            // Desactivar todos los botones
+        // NAVEGACIÓN ENTRE PÁGINAS
+        function tab(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            
-            // Activar lo seleccionado
-            document.getElementById(viewId).classList.add('active');
-            element.classList.add('active');
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
         }
 
-        // --- LÓGICA DE BÚSQUEDA ---
-        function toggleSearch() {
-            const bar = document.getElementById('search-bar');
-            bar.style.display = (bar.style.display === 'flex') ? 'none' : 'flex';
+        // BUSCADOR
+        function toggleS() {
+            const s = document.getElementById('search-box');
+            s.style.display = (s.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        function executeSearch(queryManual = null) {
-            const query = queryManual || document.getElementById('searchInput').value;
-            const feed = document.getElementById('video-feed');
-            
+        function doSearch(q = null) {
+            const query = q || document.getElementById('in-search').value;
+            const feed = document.getElementById('feed');
             if(!query) return;
 
-            feed.innerHTML = <p style="text-align:center; padding:20px; color:var(--neon-cyan);">Sincronizando con YouTube: ${query}...</p>;
-            
+            tab('p-inicio', document.querySelectorAll('.nav-btn')[0]);
+            feed.innerHTML = <p style="text-align:center; padding:40px;">Cargando contenido VIP...</p>;
+
             setTimeout(() => {
                 feed.innerHTML = "";
-                for(let i=0; i<4; i++) {
+                for(let i=0; i<5; i++) {
                     const card = document.createElement('div');
                     card.className = "video-card";
                     card.innerHTML = `
-                        <div class="player-wrap">
-                            <iframe src="https://www.youtube.com/embed?listType=search&list=${query}&index=${i}&rel=0" allowfullscreen></iframe>
+                        <div class="video-frame">
+                            <iframe src="https://www.youtube.com/embed?listType=search&list=${query}&index=${i}" allowfullscreen></iframe>
                         </div>
-                        <div class="video-details">
-                            <div class="v-avatar"></div>
-                            <div class="v-text">
-                                <h3>${query} - Video ${i+1}</h3>
-                                <p>GOAT Global • YouTube Sync</p>
+                        <div class="info">
+                            <div class="avatar"></div>
+                            <div>
+                                <h3 style="margin:0; font-size:14px;">${query} - Exclusivo GOAT</h3>
+                                <p style="margin:5px 0 0; font-size:12px; color:#aaa;">Lethnibel Ordóñez • Sincronizado</p>
                             </div>
                         </div>`;
                     feed.appendChild(card);
                 }
-                if(!queryManual) toggleSearch();
-            }, 600);
+                if(!q) toggleS();
+            }, 500);
         }
 
-        // --- LÓGICA DE PUBLICACIÓN ---
-        function openModal() { document.getElementById('pub-modal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('pub-modal').style.display = 'none'; }
-
-        function publish() {
-            const url = document.getElementById('yt-url').value;
-            if(!url) return;
-            
-            let id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop().split('?')[0];
-            
-            const card = document.createElement('div');
-            card.className = "video-card";
-            card.innerHTML = `
-                <div class="player-wrap">
-                    <iframe src="https://www.youtube.com/embed/${id}?rel=0" allowfullscreen></iframe>
-                </div>
-                <div class="video-details">
-                    <div class="v-avatar" style="background:var(--neon-cyan)"></div>
-                    <div class="v-text">
-                        <h3>CAMPAÑA ACTIVA: ${id}</h3>
-                        <p>Publicado por Director Ejecutivo • Recién</p>
-                    </div>
-                </div>`;
-            
-            document.getElementById('video-feed').prepend(card);
-            closeModal();
-            document.getElementById('yt-url').value = "";
-            switchTab('view-inicio', document.querySelectorAll('.nav-btn')[0]);
-        }
-
-        // Carga inicial
-        window.onload = () => executeSearch('Lethnibel Ordoñez Ads');
+        // INICIO AUTOMÁTICO
+        window.onload = () => doSearch('Estrategias de Negocio');
     </script>
 </body>
 </html>
