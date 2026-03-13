@@ -20,201 +20,182 @@
             font-family: 'Roboto', Arial, sans-serif;
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* --- HEADER ESTILO YOUTUBE (Imagen 2) --- */
+        /* --- HEADER YOUTUBE STYLE --- */
         header {
             background: var(--header-bg);
             padding: 10px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 2000;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-weight: bold;
-            font-size: 18px;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-icon {
-            color: var(--neon-diamond);
-            font-size: 24px;
-        }
-
-        .header-icons {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .header-icons i {
-            font-size: 20px;
-            cursor: pointer;
-            color: white;
-        }
-
-        /* --- BARRA DE CATEGORÍAS (CHIPS) --- */
-        .categories-bar {
-            background: var(--header-bg);
-            padding: 12px;
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            white-space: nowrap;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 2000;
             border-bottom: 1px solid #222;
         }
 
-        .categories-bar::-webkit-scrollbar { display: none; } /* Ocultar scroll */
+        .logo-section { display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 17px; }
+        .logo-icon { color: var(--neon-diamond); font-size: 22px; }
 
-        .chip {
-            background: var(--chip-bg);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
+        .header-icons { display: flex; align-items: center; gap: 18px; }
+        .header-icons i { font-size: 20px; cursor: pointer; font-style: normal; }
+
+        /* --- BUSCADOR --- */
+        #search-box {
+            display: none; background: var(--header-bg); padding: 10px;
+            position: absolute; top: 0; left: 0; width: 100%;
+            z-index: 3000; align-items: center; gap: 10px;
+        }
+        #search-box input {
+            flex: 1; background: #222; border: 1px solid #444; color: white;
+            padding: 10px 15px; border-radius: 20px; outline: none;
         }
 
-        .chip.active {
-            background: white;
-            color: black;
+        /* --- CHIPS --- */
+        .categories-bar {
+            background: var(--header-bg); padding: 10px;
+            display: flex; gap: 10px; overflow-x: auto;
+            border-bottom: 1px solid #222;
+        }
+        .categories-bar::-webkit-scrollbar { display: none; }
+        .chip { background: var(--chip-bg); padding: 7px 14px; border-radius: 8px; font-size: 13px; white-space: nowrap; cursor: pointer; }
+        .chip.active { background: white; color: black; }
+
+        /* --- CONTENIDO --- */
+        .content-area { height: calc(100vh - 150px); overflow-y: auto; padding-bottom: 90px; }
+        .view-section { display: none; padding: 10px; }
+        .view-section.active { display: block; }
+
+        /* --- TARJETAS DE VIDEO --- */
+        .yt-card { width: 100%; margin-bottom: 25px; background: #000; }
+        .video-container { 
+            position: relative; width: 100%; aspect-ratio: 16/9; 
+            background: #1a1a1a; border-radius: 12px; overflow: hidden;
+        }
+        .video-container iframe { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
         }
 
-        /* --- CONTENEDOR DE BÚSQUEDA OCULTO (Se activa al dar click a la lupa) --- */
-        #search-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 60px;
-            background: var(--header-bg);
-            z-index: 3000;
-            align-items: center;
-            padding: 0 15px;
-        }
-
-        .search-input-wrapper {
-            background: #222;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            padding: 5px 15px;
-            border-radius: 20px;
-            margin-right: 10px;
-        }
-
-        #search-overlay input {
-            background: transparent;
-            border: none;
-            color: white;
-            width: 100%;
-            padding: 8px;
-            outline: none;
-        }
-
-        /* --- GRID DE VIDEOS --- */
-        .content-area { padding-bottom: 80px; }
-        .yt-card { width: 100%; margin-bottom: 15px; }
-        .thumb {
-            width: 100%; aspect-ratio: 16/9;
-            background: #1a1a1a;
-            position: relative;
-        }
-        iframe { width: 100%; height: 100%; border: none; }
-
-        .video-meta { display: flex; gap: 12px; padding: 12px; }
-        .avatar { width: 36px; height: 36px; background: #333; border-radius: 50%; }
-        .meta-text h3 { margin: 0; font-size: 14px; font-weight: 500; line-height: 1.4; }
-        .meta-text p { margin: 4px 0 0; font-size: 12px; color: #aaa; }
+        .video-meta { display: flex; gap: 12px; padding: 12px 5px; }
+        .avatar { width: 36px; height: 36px; background: #333; border-radius: 50%; flex-shrink: 0; }
+        .meta-text h3 { margin: 0; font-size: 14px; font-weight: 500; color: #fff; }
 
         /* --- NAV INFERIOR --- */
         nav {
-            position: fixed; bottom: 0; width: 100%; height: 60px;
+            position: fixed; bottom: 0; width: 100%; height: 70px;
             background: var(--header-bg); border-top: 1px solid #222;
             display: flex; justify-content: space-around; align-items: center;
-            z-index: 2000;
+            padding-bottom: env(safe-area-inset-bottom);
         }
-        .nav-item { text-align: center; color: #aaa; font-size: 10px; }
+        .nav-item { text-align: center; color: #888; font-size: 10px; flex: 1; cursor: pointer; }
         .nav-item.active { color: white; }
+        .nav-item span { font-size: 20px; display: block; }
+
+        .btn-plus {
+            width: 45px; height: 45px; background: #222; border: 2px solid var(--neon-diamond);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 24px; color: white; margin-top: -30px;
+        }
+
+        #modal-pub {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            z-index: 5000; flex-direction: column; justify-content: center; padding: 30px;
+        }
+        input { background: #1a1a1a; border: 1px solid #333; color: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+        .btn-confirm { background: white; color: black; padding: 15px; border-radius: 12px; font-weight: bold; border: none; }
     </style>
 </head>
 <body>
 
-    <div id="search-overlay">
-        <i onclick="toggleSearch()" style="margin-right: 15px;">←</i>
-        <div class="search-input-wrapper">
-            <input type="text" placeholder="Buscar en GOAT Ads..." onkeyup="filtrar(this)">
-        </div>
-        <i>🎙️</i>
+    <div id="search-box">
+        <span onclick="toggleSearch()" style="cursor:pointer">←</span>
+        <input type="text" id="query" placeholder="Buscar en YouTube..." onkeypress="if(event.key === 'Enter') buscarYoutube()">
+        <button onclick="buscarYoutube()" style="background:none; border:none; color:var(--neon-diamond); font-weight:bold;">IR</button>
     </div>
 
-    <header>
+    <header id="main-header">
         <div class="logo-section">
             <span class="logo-icon">💎</span>
             <span>GOAT GLOBAL ADS</span>
         </div>
         <div class="header-icons">
-            <i onclick="alert('Transmitiendo...')">📺</i>
-            <i onclick="alert('Sin notificaciones')">🔔</i>
+            <i>📺</i>
+            <i>🔔</i>
             <i onclick="toggleSearch()">🔍</i>
         </div>
     </header>
 
     <div class="categories-bar">
-        <div class="chip active">Todo</div>
-        <div class="chip">Novedad para ti</div>
-        <div class="chip">Música</div>
-        <div class="chip">Estrategias</div>
-        <div class="chip">Videojuegos</div>
-        <div class="chip">Directos</div>
+        <div class="chip active" onclick="buscarYoutube('Marketing')">Todo</div>
+        <div class="chip" onclick="buscarYoutube('Musica')">Música</div>
+        <div class="chip" onclick="buscarYoutube('Exito')">VIP</div>
     </div>
 
     <div class="content-area">
-        <div id="feed">
-            <div class="yt-card">
-                <div class="thumb">
-                    <iframe src="https://www.youtube.com/embed/S9uTsc_S288" allowfullscreen></iframe>
-                </div>
-                <div class="video-meta">
-                    <div class="avatar"></div>
-                    <div class="meta-text">
-                        <h3 class="v-title">SISTEMA ORDÓÑEZ: MONETIZACIÓN REAL</h3>
-                        <p>Lethnibel Ordóñez • 10M vistas • hace 1 hora</p>
-                    </div>
+        <section id="inicio" class="view-section active">
+            <div id="feed"></div>
+        </section>
+
+        <section id="perfil" class="view-section">
+            <div style="text-align:center; padding:40px;">
+                <div style="width:80px; height:80px; border:2px solid var(--neon-diamond); border-radius:50%; margin:0 auto; font-size:30px; display:flex; align-items:center; justify-content:center;">L</div>
+                <h2>Lethnibel Ordóñez</h2>
+                <div style="background:#111; padding:20px; border-radius:15px; margin-top:20px;">
+                    <p>SALDO ACUMULADO</p>
+                    <h3 style="color:#00ff00; font-size:24px;">$1,250.00</h3>
                 </div>
             </div>
-        </div>
+        </section>
+    </div>
+
+    <div id="modal-pub">
+        <h2 style="text-align:center">Publicar Campaña</h2>
+        <input type="text" id="video-url" placeholder="Pega el link de YouTube">
+        <button class="btn-confirm" onclick="publicar()">LANZAR</button>
+        <p onclick="cerrarModal()" style="text-align:center; margin-top:20px; opacity:0.5; cursor:pointer;">Cancelar</p>
     </div>
 
     <nav>
-        <div class="nav-item active">🏠<br>Inicio</div>
-        <div class="nav-item">🔥<br>Shorts</div>
-        <div style="font-size: 24px; color: var(--neon-diamond);">⊕</div>
-        <div class="nav-item">🕒<br>Suscripciones</div>
-        <div class="nav-item">👤<br>Tú</div>
+        <div class="nav-item active" onclick="navegar('inicio', this)"><span>🏠</span>Inicio</div>
+        <div class="nav-item"><span>🔥</span>Shorts</div>
+        <div class="btn-plus" onclick="abrirModal()">+</div>
+        <div class="nav-item"><span>🕒</span>Historial</div>
+        <div class="nav-item" onclick="navegar('perfil', this)"><span>👤</span>Tú</div>
     </nav>
 
     <script>
-        function toggleSearch() {
-            const overlay = document.getElementById('search-overlay');
-            overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
+        function navegar(id, elemento) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            elemento.classList.add('active');
         }
 
-        function filtrar(input) {
-            const val = input.value.toLowerCase();
-            const cards = document.getElementsByClassName('yt-card');
-            for (let card of cards) {
-                const title = card.querySelector('.v-title').innerText.toLowerCase();
-                card.style.display = title.includes(val) ? "block" : "none";
-            }
+        function toggleSearch() {
+            const box = document.getElementById('search-box');
+            box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
         }
-    </script>
-</body>
-</html>
+
+        function buscarYoutube(manualQuery = null) {
+            const query = manualQuery || document.getElementById('query').value;
+            const feed = document.getElementById('feed');
+            if(!query) return;
+            feed.innerHTML = <p style="text-align:center; padding:20px;">Buscando en YouTube...</p>;
+            setTimeout(() => {
+                feed.innerHTML = "";
+                for(let i=0; i<4; i++) {
+                    const card = document.createElement('div');
+                    card.className = "yt-card";
+                    card.innerHTML = `<div class="video-container"><iframe src="https://www.youtube.com/embed?listType=search&list=${query}&index=${i}"></iframe></div>
+                    <div class="video-meta"><div class="avatar"></div><div class="meta-text"><h3>${query} - Video ${i+1}</h3><p>GOAT Ads View</p></div></div>`;
+                    feed.appendChild(card);
+                }
+                if(!manualQuery) toggleSearch();
+            }, 500);
+        }
+
+        function abrirModal() { document.getElementById('modal-pub').style.display = 'flex'; }
+        function cerrarModal() { document.getElementById('modal-pub').style.display = 'none'; }
+        
+        function publicar() {
+            const url = document.getElementById('video-url').value;
+            if(!url) return;
+            let id
