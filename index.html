@@ -3,82 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA CABRA NEGRA | Edición Profesional</title>
+    <title>LA CABRA NEGRA | Plataforma 2026</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
-<body>
-
-    <header>
+<body onclick="activarAudioContexto()"> <header class="navbar efecto-glass">
         <div class="logo">LA CABRA NEGRA</div>
         <div id="user-area">
-            <button class="btn-ui" onclick="abrirModal('modal-login')">INICIAR SESIÓN</button>
+            <button class="btn-ui" onclick="abrirModal('modal-login')">ACCEDER</button>
         </div>
     </header>
 
-    <div class="main-container">
-        <aside>
-            <div class="nav-item active" onclick="mostrarSeccion('inicio', this)">🏠 Cartelera</div>
-            <div class="nav-item" onclick="mostrarSeccion('ajustes', this)">⚙️ Estética</div>
+    <div class="layout">
+        <aside class="sidebar efecto-glass">
+            <div class="nav-item" onclick="location.reload()">🏠 Inicio</div>
             <div class="nav-item" onclick="abrirModal('modal-subir')">📤 Publicar</div>
+            <div class="nav-item" onclick="abrirModal('modal-estetica')">🎨 Estética</div>
+            <hr style="opacity:0.1; margin:15px 0;">
+            <button id="btn-music" class="btn-music" onclick="toggleMusica()">🎵 MÚSICA: OFF</button>
         </aside>
 
-        <main>
-            <section id="inicio" class="section active">
-                <h2 class="titulo-seccion">Anuncios <span class="destaque">Activos</span></h2>
-                <div class="video-grid" id="grid-videos"></div>
-            </section>
-
-            <section id="ajustes" class="section">
-                <h2>Configuración Visual</h2>
-                <p>Elige un color para la plataforma:</p>
-                <div class="theme-flex">
-                    <button class="dot azul" onclick="cambiarTema('#00d2ff')"></button>
-                    <button class="dot rojo" onclick="cambiarTema('#ff2d55')"></button>
-                    <button class="dot morado" onclick="cambiarTema('#a259ff')"></button>
+        <main class="feed">
+            <div class="hero-seccion">
+                <h1>Cartelera Global</h1>
+                <p>Publicidad que se adapta a tu mundo.</p>
+            </div>
+            <div id="grid-videos" class="video-grid">
                 </div>
-            </section>
         </main>
     </div>
 
-    <div id="modal-login" class="modal">
-        <div class="modal-content">
-            <h2>Crear Cuenta</h2>
-            <input type="text" id="user-name" placeholder="Tu Nombre o Marca">
-            <button class="btn-ui full" onclick="simularLogin()">REGISTRARME</button>
+    <div id="modal-subir" class="modal">
+        <div class="modal-content efecto-glass">
+            <h3>Lanzar Anuncio</h3>
+            <input type="text" id="v-titulo" placeholder="Título">
+            <input type="text" id="v-url" placeholder="Link de YouTube">
+            <input type="text" id="v-social" placeholder="Red Social (Link)">
+            <button class="btn-ui" onclick="motorPublicar()">PUBLICAR</button>
+            <button class="btn-text" onclick="cerrarModales()">Cerrar</button>
         </div>
     </div>
 
-    <div id="modal-subir" class="modal">
-        <div class="modal-content">
-            <h2>Publicar Video</h2>
-            <input type="text" id="v-titulo" placeholder="Título del anuncio">
-            <input type="text" id="v-url" placeholder="URL de YouTube">
-            <button class="btn-ui full" onclick="publicar()">PUBLICAR</button>
-            <button class="btn-cerrar" onclick="cerrarModales()">Cancelar</button>
-        </div>
-    </div>
+    <audio id="audio-azul" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+    <audio id="audio-rojo" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+    <audio id="audio-morado" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"></audio>
 
     <script src="script.js"></script>
 </body>
 </html>
-
-<div class="controles-extra">
-    <button class="btn-flotante-subir" onclick="abrirModal('modal-subir')">📤 PUBLICAR</button>
-    
-    <button id="btn-music" onclick="toggleMusica()">🎵 MÚSICA: OFF</button>
-</div>
-
-<div id="modal-subir" class="modal">
-    <div class="modal-content">
-        <h3>Publicar en Cartelera</h3>
-        <input type="text" id="v-titulo" placeholder="Título del anuncio">
-        <input type="text" id="v-url" placeholder="Link de YouTube">
-        <button class="btn-ui" onclick="publicar()">SUBIR AHORA</button>
-        <button onclick="cerrarModales()" style="background:none; border:none; color:gray; cursor:pointer; margin-top:10px;">Cerrar</button>
-    </div>
-</div>
-
 <audio id="audio-azul" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 <audio id="audio-rojo" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
 <audio id="audio-morado" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"></audio>
+
