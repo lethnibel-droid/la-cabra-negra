@@ -3,160 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA CABRA NEGRA | Multi-Theme Streaming</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- VARIABLES DINÁMICAS --- */
-        :root {
-            --color-principal: #007bff; /* Color inicial (Azul) */
-            --color-glow: rgba(0, 123, 255, 0.4);
-            --negro-profundo: #050505;
-            --negro-tarjeta: #111;
-            --vidrio: rgba(255, 255, 255, 0.05);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--negro-profundo); color: white; overflow: hidden; transition: 0.3s; }
-
-        /* HEADER */
-        header {
-            height: 70px; display: flex; justify-content: space-between; align-items: center;
-            padding: 0 30px; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
-            border-bottom: 2px solid var(--color-principal); position: fixed; width: 100%; z-index: 1000;
-        }
-        .logo { font-family: 'Syncopate', sans-serif; color: var(--color-principal); text-shadow: 0 0 15px var(--color-glow); }
-
-        /* LAYOUT */
-        .main-container { display: flex; margin-top: 70px; height: calc(100vh - 70px); }
-        aside { width: 240px; background: #000; padding: 20px; border-right: 1px solid #222; }
-        
-        .nav-item {
-            padding: 12px; border-radius: 10px; cursor: pointer; margin-bottom: 10px;
-            color: #888; transition: 0.3s; display: flex; align-items: center; gap: 10px;
-        }
-        .nav-item.active, .nav-item:hover { background: var(--vidrio); color: var(--color-principal); }
-
-        main { flex-grow: 1; padding: 30px; overflow-y: auto; background: radial-gradient(circle at top right, #111, #000); }
-
-        /* SECCIONES */
-        .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* PANEL DE CONFIGURACIÓN */
-        .theme-selector {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 15px; margin-top: 20px;
-        }
-        .color-dot {
-            height: 50px; border-radius: 10px; cursor: pointer; border: 2px solid transparent;
-            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; color: black;
-        }
-        .color-dot:hover { transform: scale(1.05); border-color: white; }
-
-        /* VIDEOS */
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .video-card { background: var(--negro-tarjeta); border-radius: 15px; overflow: hidden; border: 1px solid #222; transition: 0.3s; }
-        .video-card:hover { border-color: var(--color-principal); box-shadow: 0 0 20px var(--color-glow); }
-        .thumb { height: 180px; background: #000; }
-        .info { padding: 15px; }
-
-        /* MODALES */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center;
-        }
-        .modal-content {
-            background: #111; padding: 40px; border-radius: 20px; border: 1px solid var(--color-principal);
-            width: 380px; text-align: center;
-        }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; border-radius: 8px; }
-        .btn-main { width: 100%; padding: 12px; background: var(--color-principal); border: none; font-weight: bold; border-radius: 8px; cursor: pointer; color: black; }
-    </style>
+    <title>LA CABRA NEGRA | Edición Profesional</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header>
         <div class="logo">LA CABRA NEGRA</div>
-        <button class="nav-item" style="color:white; border:1px solid var(--color-principal)" onclick="abrirModal('modal-login')">CUENTA</button>
+        <div id="user-area">
+            <button class="btn-ui" onclick="abrirModal('modal-login')">INICIAR SESIÓN</button>
+        </div>
     </header>
 
     <div class="main-container">
         <aside>
-            <div class="nav-item active" id="btn-cartelera" onclick="showTab('inicio', this)">📺 Cartelera</div>
+            <div class="nav-item active" onclick="mostrarSeccion('inicio', this)">🏠 Cartelera</div>
+            <div class="nav-item" onclick="mostrarSeccion('ajustes', this)">⚙️ Estética</div>
             <div class="nav-item" onclick="abrirModal('modal-subir')">📤 Publicar</div>
-            <div class="nav-item" id="btn-ajustes" onclick="showTab('ajustes', this)">⚙️ Ajustes</div>
         </aside>
 
         <main>
             <section id="inicio" class="section active">
-                <h2 style="margin-bottom: 20px;">Publicidad Global</h2>
-                <div class="video-grid" id="grid-videos">
-                    <p style="color:#444">No hay videos aún. ¡Sé el primero!</p>
-                </div>
+                <h2 class="titulo-seccion">Anuncios <span class="destaque">Activos</span></h2>
+                <div class="video-grid" id="grid-videos"></div>
             </section>
 
             <section id="ajustes" class="section">
-                <h2>Configuración de Estilo</h2>
-                <p style="color:#888; margin-bottom: 30px;">Personaliza el color de tu plataforma</p>
-                
-                <h3>Elige un Color de Tema:</h3>
-                <div class="theme-selector">
-                    <div class="color-dot" style="background: #007bff;" onclick="cambiarColor('#007bff', 'rgba(0,123,255,0.4)')">Azul</div>
-                    <div class="color-dot" style="background: #ff5722;" onclick="cambiarColor('#ff5722', 'rgba(255,87,34,0.4)')">Naranja</div>
-                    <div class="color-dot" style="background: #2ecc71;" onclick="cambiarColor('#2ecc71', 'rgba(46,204,113,0.4)')">Verde</div>
-                    <div class="color-dot" style="background: #e74c3c;" onclick="cambiarColor('#e74c3c', 'rgba(231,76,60,0.4)')">Rojo</div>
-                    <div class="color-dot" style="background: #9b59b6;" onclick="cambiarColor('#9b59b6', 'rgba(155,89,182,0.4)')">Morado</div>
-                    <div class="color-dot" style="background: #f1c40f;" onclick="cambiarColor('#f1c40f', 'rgba(241,196,15,0.4)')">Amarillo</div>
+                <h2>Configuración Visual</h2>
+                <p>Elige un color para la plataforma:</p>
+                <div class="theme-flex">
+                    <button class="dot azul" onclick="cambiarTema('#00d2ff')"></button>
+                    <button class="dot rojo" onclick="cambiarTema('#ff2d55')"></button>
+                    <button class="dot morado" onclick="cambiarTema('#a259ff')"></button>
                 </div>
             </section>
         </main>
     </div>
 
-    <div id="modal-login" class="modal"><div class="modal-content"><h2>CUENTA</h2><input type="email" placeholder="Correo"><button class="btn-main" onclick="cerrarModales()">ENTRAR</button></div></div>
-    
-    <div id="modal-subir" class="modal">
+    <div id="modal-login" class="modal">
         <div class="modal-content">
-            <h2>SUBIR VIDEO</h2>
-            <input type="text" id="v-titulo" placeholder="Título">
-            <input type="text" id="v-url" placeholder="URL de YouTube">
-            <button class="btn-main" onclick="procesarVideo()">PUBLICAR</button>
-            <p onclick="cerrarModales()" style="margin-top:10px; cursor:pointer">Cancelar</p>
+            <h2>Crear Cuenta</h2>
+            <input type="text" id="user-name" placeholder="Tu Nombre o Marca">
+            <button class="btn-ui full" onclick="simularLogin()">REGISTRARME</button>
         </div>
     </div>
 
-    <script>
-        // --- FUNCIÓN PARA CAMBIAR EL COLOR EN TODA LA PÁGINA ---
-        function cambiarColor(color, glow) {
-            document.documentElement.style.setProperty('--color-principal', color);
-            document.documentElement.style.setProperty('--color-glow', glow);
-        }
+    <div id="modal-subir" class="modal">
+        <div class="modal-content">
+            <h2>Publicar Video</h2>
+            <input type="text" id="v-titulo" placeholder="Título del anuncio">
+            <input type="text" id="v-url" placeholder="URL de YouTube">
+            <button class="btn-ui full" onclick="publicar()">PUBLICAR</button>
+            <button class="btn-cerrar" onclick="cerrarModales()">Cancelar</button>
+        </div>
+    </div>
 
-        function showTab(id, el) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
-        }
-
-        function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function cerrarModales() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
-
-        function procesarVideo() {
-            const t = document.getElementById('v-titulo').value;
-            const u = document.getElementById('v-url').value;
-            const id = u.split('v=')[1]?.split('&')[0] || u.split('/').pop();
-            const grid = document.getElementById('grid-videos');
-            if(grid.innerHTML.includes('No hay videos')) grid.innerHTML = '';
-            
-            grid.innerHTML = `
-                <div class="video-card">
-                    <div class="thumb"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>
-                    <div class="info"><h4>${t}</h4><p style="color:var(--color-principal)">Activo ahora</p></div>
-                </div>
-            ` + grid.innerHTML;
-            cerrarModales();
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
