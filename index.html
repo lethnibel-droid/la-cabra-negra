@@ -1,88 +1,191 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOAT GLOBAL ADS</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body onclick="desbloquearAudio()">
+    <title>GOAT GLOBAL ADS | Lethnibel Ordóñez</title>
+    <style>
+        :root {
+            --primary: #ff0000; 
+            --gold: #d4af37;    
+            --dark: #000000;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
 
-    <header class="navbar efecto-glass">
-        <div class="logo">GOAT GLOBAL ADS</div>
-        <div class="header-right">
-            <button class="btn-circular" onclick="abrirModal('modal-estetica')">🎨</button>
-            <button id="btn-music" class="btn-circular" onclick="toggleMusica()">🎵</button>
-            <button class="btn-ui" onclick="abrirModal('modal-login')">ACCEDER</button>
+        body {
+            background-color: var(--dark);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding-bottom: 90px;
+        }
+
+        /* --- HEADER GOAT --- */
+        header {
+            position: sticky; top: 0; z-index: 999;
+            background: rgba(0,0,0,0.95);
+            padding: 18px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand span { font-weight: 900; letter-spacing: 2px; font-size: 1.2rem; }
+        .logo-goat { font-size: 1.6rem; filter: drop-shadow(0 0 5px var(--primary)); }
+
+        /* --- SECCIONES (SPA) --- */
+        .section { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
+        .section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- CARDS ESTILO GLASS --- */
+        .goat-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            margin-bottom: 25px;
+            padding: 15px;
+            position: relative;
+        }
+
+        .video-wrapper { 
+            width: 100%; aspect-ratio: 16/9; 
+            background: #0a0a0a; border-radius: 15px; 
+            overflow: hidden; 
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        .verified {
+            position: absolute; top: 25px; right: 25px;
+            background: var(--gold); color: black;
+            font-size: 0.6rem; font-weight: 900; padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* --- NAVEGACIÓN --- */
+        nav {
+            position: fixed; bottom: 0; width: 100%; height: 80px;
+            background: #050505; display: flex; justify-content: space-around;
+            align-items: center; border-top: 1px solid #222; z-index: 1000;
+        }
+
+        .nav-btn { text-align: center; opacity: 0.5; cursor: pointer; transition: 0.3s; }
+        .nav-btn.active { opacity: 1; color: var(--primary); }
+        .nav-btn i { font-size: 1.5rem; display: block; }
+
+        .btn-add {
+            background: white; color: black;
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: bold; margin-top: -30px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        }
+
+        /* --- MODAL --- */
+        #modal {
+            display: none; position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.95); z-index: 2000;
+            flex-direction: column; justify-content: center; align-items: center;
+        }
+        input {
+            width: 80%; padding: 15px; border-radius: 10px;
+            border: 1px solid #333; background: #111; color: white; margin: 20px 0;
+        }
+        .btn-pub {
+            background: var(--primary); color: white; border: none;
+            padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <span class="logo-goat">🐐</span>
+            <span>GOAT GLOBAL ADS</span>
+        </div>
+        <div style="font-size: 1.2rem; display: flex; gap: 15px;">
+            <span onclick="alert('Notificaciones GOAT')">🔔</span>
+            <span onclick="alert('Buscador Global')">🔍</span>
         </div>
     </header>
 
-    <div class="layout">
-        <aside class="sidebar efecto-glass">
-            <div class="nav-item" onclick="location.reload()">🏠 Inicio</div>
-            <div class="nav-item" onclick="abrirModal('modal-subir')">📤 Publicar</div>
-            <div class="nav-item">📊 Panel Pro</div>
-            <div class="stats-box">
-                <p>👤 Usuarios: <span id="u-count">1.2k</span></p>
-                <p>📺 Anuncios: <span id="a-count">450</span></p>
-            </div>
-        </aside>
-
-        <main class="feed">
-            <section class="stories" id="stories-area">
-                <div class="story-add">+</div>
-                <div class="story-circle"></div>
-                <div class="story-circle"></div>
-            </section>
-
-            <div id="grid-videos" class="video-grid">
+    <section id="home" class="section active">
+        <div id="feed">
+            <div class="goat-card">
+                <div class="verified">GOAT VERIFIED</div>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/S9uTsc_S288" allowfullscreen></iframe>
                 </div>
-        </main>
-    </div>
-
-    <div id="modal-subir" class="modal">
-        <div class="modal-content efecto-glass">
-            <h3>Lanzar Campaña</h3>
-            <input type="text" id="v-titulo" placeholder="Título del Anuncio">
-            <input type="text" id="v-url" placeholder="URL de YouTube">
-            <input type="text" id="v-social" placeholder="Link Red Social">
-            <button class="btn-ui" onclick="motorPublicar()">PUBLICAR</button>
-            <button class="btn-txt" onclick="cerrarModales()">Cerrar</button>
-        </div>
-    </div>
-
-    <div id="modal-estetica" class="modal">
-        <div class="modal-content efecto-glass">
-            <h3>Ilusión Visual</h3>
-            <div class="picker">
-                <div class="dot azul" onclick="cambiarTema('#00d2ff','azul')"></div>
-                <div class="dot rojo" onclick="cambiarTema('#ff004c','rojo')"></div>
-                <div class="dot morado" onclick="cambiarTema('#bc00ff','morado')"></div>
+                <div style="display: flex; justify-content: space-around; margin-top: 15px;">
+                    <button style="background:none; border:none; color:white; cursor:pointer;" onclick="this.style.color='#d4af37'">🐐 Like</button>
+                    <button style="background:none; border:none; color:white; cursor:pointer;" onclick="alert('Copiado')">🔗 Share</button>
+                    <button style="background:none; border:none; color:white; cursor:pointer;" onclick="alert('ROI: 5.2%')">📊 ROI</button>
+                </div>
             </div>
-            <button class="btn-txt" onclick="cerrarModales()">Cerrar</button>
         </div>
+    </section>
+
+    <section id="profile" class="section">
+        <div style="text-align: center; padding: 20px;">
+            <div style="width: 80px; height: 80px; background: #222; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 2px solid var(--gold);">O</div>
+            <h2>Lethnibel Ordóñez</h2>
+            <p style="color: var(--gold);">Director Ejecutivo</p>
+        </div>
+        <div class="goat-card">
+            <h3>📈 Rendimiento Global</h3>
+            <p>Saldo: <span style="color: #00ff00;">$0.00 USD</span></p>
+            <p>Nivel: <span style="color: var(--gold);">GOAT ELITE</span></p>
+        </div>
+    </section>
+
+    <div id="modal">
+        <h2>NUEVA CAMPAÑA</h2>
+        <input type="text" id="url" placeholder="Pega el link aquí">
+        <button class="btn-pub" onclick="publish()">LANZAR ANUNCIO</button>
+        <p onclick="closeM()" style="margin-top:20px; cursor:pointer; opacity:0.5;">Cerrar</p>
     </div>
 
-    <audio id="audio-azul" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-<audio id="audio-rojo" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"></audio>
-<audio id="audio-morado" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"></audio>
-    <script src="script.js"></script>
+    <nav>
+        <div class="nav-btn active" onclick="tab('home', this)"><i>🏠</i>Inicio</div>
+        <div class="nav-btn" onclick="alert('Tendencias GOAT')"><i>🔥</i>Trends</div>
+        <div class="btn-add" onclick="openM()">+</div>
+        <div class="nav-btn" onclick="alert('Historial')"><i>🕒</i>Historial</div>
+        <div class="nav-btn" onclick="tab('profile', this)"><i>👤</i>Perfil</div>
+    </nav>
+
+    <script>
+        function tab(s, e) {
+            document.querySelectorAll('.section').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
+            document.getElementById(s).classList.add('active');
+            e.classList.add('active');
+        }
+
+        function openM() { document.getElementById('modal').style.display = 'flex'; }
+        function closeM() { document.getElementById('modal').style.display = 'none'; }
+
+        function publish() {
+            const link = document.getElementById('url').value;
+            if(!link) return;
+            let id = link.includes('v=') ? link.split('v=')[1].split('&')[0] : link.split('/').pop();
+            const f = document.getElementById('feed');
+            const c = document.createElement('div');
+            c.className = "goat-card";
+            c.innerHTML = `
+                <div class="verified">GOAT VERIFIED</div>
+                <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${id}"></iframe></div>
+                <div style="display:flex; justify-content:space-around; margin-top:15px;">
+                    <button style="background:none; border:none; color:white; cursor:pointer;" onclick="this.style.color='#d4af37'">🐐 Like</button>
+                    <button style="background:none; border:none; color:white; cursor:pointer;" onclick="alert('ROI: 0.0%')">📊 ROI</button>
+                </div>`;
+            f.prepend(c);
+            closeM();
+            document.getElementById('url').value = "";
+        }
+    </script>
 </body>
 </html>
-<link rel="stylesheet" href="style.css?v=2">
-aside class="sidebar efecto-glass">
-    <nav>
-        <div class="nav-item" onclick="window.location.reload()">🏠 Inicio</div>
-        
-        <div class="nav-item" onclick="abrirModal('modal-subir')">📤 Publicar</div>
-        
-        <div class="nav-item" onclick="alert('Panel Pro: Disponible en la versión 2026')">📈 Panel Pro</div>
-        
-        <hr style="margin:15px 0; opacity:0.1;">
-        
-        <div class="stats-global">
-            <p>👥 Usuarios: <span id="count-users">1,240</span></p>
-            <p>📺 Anuncios: <span id="count-ads">0</span></p>
-        </div>
-    </nav>
-</aside>
