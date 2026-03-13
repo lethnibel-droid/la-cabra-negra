@@ -3,70 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA CABRA NEGRA | Plataforma Publicitaria 2026</title>
+    <title>GOAT GLOBAL ADS</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body onclick="activarAudio()">
+<body onclick="desbloquearAudio()">
 
     <header class="navbar efecto-glass">
-        <div class="logo">LA CABRA NEGRA</div>
+        <div class="logo">GOAT GLOBAL ADS</div>
         <div class="header-right">
             <button class="btn-circular" onclick="abrirModal('modal-estetica')">🎨</button>
             <button id="btn-music" class="btn-circular" onclick="toggleMusica()">🎵</button>
-            <div id="user-area">
-                <button class="btn-ui" onclick="abrirModal('modal-login')">ACCEDER</button>
-            </div>
+            <button class="btn-ui" onclick="abrirModal('modal-login')">ACCEDER</button>
         </div>
     </header>
 
     <div class="layout">
         <aside class="sidebar efecto-glass">
-            <nav>
-                <div class="nav-item" onclick="location.reload()">🏠 Inicio</div>
-                <div class="nav-item" onclick="abrirModal('modal-subir')">📤 Publicar</div>
-                <div class="nav-item">📈 Panel Pro</div>
-                <hr>
-                <div class="stats-global">
-                    <p>👥 Usuarios: <span id="count-users">0</span></p>
-                    <p>📺 Anuncios: <span id="count-ads">0</span></p>
-                </div>
-            </nav>
+            <div class="nav-item" onclick="location.reload()">🏠 Inicio</div>
+            <div class="nav-item" onclick="abrirModal('modal-subir')">📤 Publicar</div>
+            <div class="nav-item">📊 Panel Pro</div>
+            <div class="stats-box">
+                <p>👤 Usuarios: <span id="u-count">1.2k</span></p>
+                <p>📺 Anuncios: <span id="a-count">450</span></p>
+            </div>
         </aside>
 
         <main class="feed">
-            <section class="stories-container" id="stories">
-                </section>
+            <section class="stories" id="stories-area">
+                <div class="story-add">+</div>
+                <div class="story-circle"></div>
+                <div class="story-circle"></div>
+            </section>
 
-            <section class="video-grid" id="grid-videos">
-                </section>
+            <div id="grid-videos" class="video-grid">
+                </div>
         </main>
     </div>
 
-    <div id="modal-login" class="modal"><div class="modal-content efecto-glass">
-        <h3>Bienvenido</h3>
-        <input type="text" id="u-nom" placeholder="Usuario">
-        <button class="btn-ui" onclick="motorLogin()">Entrar</button>
-        <button class="btn-txt" onclick="cerrarModales()">Cancelar</button>
-    </div></div>
-
-    <div id="modal-subir" class="modal"><div class="modal-content efecto-glass">
-        <h3>Lanzar Campaña</h3>
-        <input type="text" id="v-titulo" placeholder="Título del Anuncio">
-        <input type="text" id="v-url" placeholder="URL de YouTube">
-        <input type="text" id="v-social" placeholder="Link de Red Social (IG/TikTok)">
-        <button class="btn-ui" onclick="motorPublicar()">PUBLICAR AHORA</button>
-        <button class="btn-txt" onclick="cerrarModales()">Cerrar</button>
-    </div></div>
-
-    <div id="modal-estetica" class="modal"><div class="modal-content efecto-glass">
-        <h3>Ilusión Visual</h3>
-        <div class="color-picker">
-            <div class="dot azul" onclick="cambiarTema('#00d2ff','rgba(0,210,255,0.4)','azul')"></div>
-            <div class="dot rojo" onclick="cambiarTema('#ff004c','rgba(255,0,76,0.4)','rojo')"></div>
-            <div class="dot morado" onclick="cambiarTema('#bc00ff','rgba(188,0,255,0.4)','morado')"></div>
+    <div id="modal-subir" class="modal">
+        <div class="modal-content efecto-glass">
+            <h3>Lanzar Campaña</h3>
+            <input type="text" id="v-titulo" placeholder="Título del Anuncio">
+            <input type="text" id="v-url" placeholder="URL de YouTube">
+            <input type="text" id="v-social" placeholder="Link Red Social">
+            <button class="btn-ui" onclick="motorPublicar()">PUBLICAR</button>
+            <button class="btn-txt" onclick="cerrarModales()">Cerrar</button>
         </div>
-        <button class="btn-txt" onclick="cerrarModales()">Cerrar</button>
-    </div></div>
+    </div>
+
+    <div id="modal-estetica" class="modal">
+        <div class="modal-content efecto-glass">
+            <h3>Ilusión Visual</h3>
+            <div class="picker">
+                <div class="dot azul" onclick="cambiarTema('#00d2ff','azul')"></div>
+                <div class="dot rojo" onclick="cambiarTema('#ff004c','rojo')"></div>
+                <div class="dot morado" onclick="cambiarTema('#bc00ff','morado')"></div>
+            </div>
+            <button class="btn-txt" onclick="cerrarModales()">Cerrar</button>
+        </div>
+    </div>
 
     <audio id="audio-azul" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
     <audio id="audio-rojo" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
