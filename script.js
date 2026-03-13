@@ -60,3 +60,17 @@ function cambiarTema(color) {
     document.documentElement.style.setProperty('--color-principal', color);
     document.documentElement.style.setProperty('--color-glow', color + '4D');
 }
+
+/* ESTILOS DE VIDEO Y MÚSICA */
+.controles-extra { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
+
+#btn-music, .btn-flotante-subir {
+    background: rgba(0,0,0,0.7); color: white; border: 1px solid var(--color-principal);
+    padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold;
+    backdrop-filter: blur(10px); transition: 0.3s;
+}
+
+#btn-music:hover, .btn-flotante-subir:hover { background: var(--color-principal); color: black; transform: scale(1.1); }
+
+.video-card { background: #111; border-radius: 20px; overflow: hidden; border: 1px solid #333; margin-bottom: 20px; animation: aparecer 0.5s ease; }
+@keyframes aparecer { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } 
