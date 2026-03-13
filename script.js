@@ -60,8 +60,7 @@ function cambiarTema(color) {
     document.documentElement.style.setProperty('--color-principal', color);
     document.documentElement.style.setProperty('--color-glow', color + '4D');
 }
-
-/* ESTILOS DE VIDEO Y MÚSICA */
+[9:57 p. m., 12/3/2026] lethnibelo: /* ESTILOS DE VIDEO Y MÚSICA */
 .controles-extra { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
 
 #btn-music, .btn-flotante-subir {
@@ -73,4 +72,50 @@ function cambiarTema(color) {
 #btn-music:hover, .btn-flotante-subir:hover { background: var(--color-principal); color: black; transform: scale(1.1); }
 
 .video-card { background: #111; border-radius: 20px; overflow: hidden; border: 1px solid #333; margin-bottom: 20px; animation: aparecer 0.5s ease; }
-@keyframes aparecer { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } 
+@keyframes aparecer { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+[9:59 p. m., 12/3/2026] lethnibelo: // SCRIPT ÚNICO: VIDEO + MÚSICA
+let musicaActiva = false;
+let colorSeleccionado = 'azul';
+
+// Función para Publicar Video
+function publicar() {
+    const titulo = document.getElementById('v-titulo').value;
+    const url = document.getElementById('v-url').value;
+    const id = url.split('v=')[1]?.split('&')[0] || url.split('/').pop().split('?')[0];
+    
+    if(!id) return alert("Pega un link de YouTube válido");
+
+    const card = `
+        <div class="video-card">
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe>
+            <div style="padding:15px;"><h4>${titulo || 'Anuncio'}</h4></div>
+        </div>`;
+    
+    document.getElementById('grid-videos').innerHTML = card + document.getElementById('grid-videos').innerHTML;
+    cerrarModales();
+}
+
+// Función para Música por Color
+function cambiarTema(color, brillo, nombreColor) {
+    document.documentElement.style.setProperty('--color-principal', color);
+    colorSeleccionado = nombreColor; // Guarda si es rojo, azul, etc.
+    if(musicaActiva) reproducirMusica();
+}
+
+function toggleMusica() {
+    musicaActiva = !musicaActiva;
+    const btn = document.getElementById('btn-music');
+    if(musicaActiva) {
+        reproducirMusica();
+        btn.innerHTML = "🔊 MÚSICA: ON";
+    } else {
+        document.querySelectorAll('audio').forEach(a => a.pause());
+        btn.innerHTML = "🎵 MÚSICA: OFF";
+    }
+}
+
+function reproducirMusica() {
+    document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
+    const sonido = document.getElementById('audio-' + colorSeleccionado);
+    if(sonido) sonido.play();
+}
