@@ -3,29 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Cabra Negra | Streaming Real</title>
-    <link rel="stylesheet" href="style.css">
+    <title>LA CABRA NEGRA | Elite Streaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --naranja-neon: #ff5722;
+            --naranja-glow: rgba(255, 87, 34, 0.5);
+            --fondo-oscuro: #050505;
+            --vidrio: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--fondo-oscuro);
+            color: white;
+            overflow: hidden; /* Evita scroll doble */
+        }
+
+        /* --- BACKGROUND DINÁMICO --- */
+        .bg-glow {
+            position: fixed; top: -10%; left: -10%; width: 40%; height: 40%;
+            background: radial-gradient(circle, var(--naranja-glow) 0%, transparent 70%);
+            z-index: -1; filter: blur(80px);
+        }
+
+        /* --- HEADER --- */
+        header {
+            height: 70px; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 30px; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px); border-bottom: 1px solid var(--vidrio);
+            position: fixed; width: 100%; z-index: 1000;
+        }
+
+        .logo { font-family: 'Syncopate', sans-serif; color: var(--naranja-neon); letter-spacing: 3px; }
+
+        .search-bar {
+            background: var(--vidrio); border: 1px solid #333; padding: 8px 20px;
+            border-radius: 20px; width: 40%; display: flex;
+        }
+
+        .search-bar input {
+            background: none; border: none; color: white; width: 100%; outline: none;
+        }
+
+        /* --- LAYOUT --- */
+        .main-container { display: flex; margin-top: 70px; height: calc(100vh - 70px); }
+
+        /* Barra Lateral */
+        aside {
+            width: 260px; background: rgba(10, 10, 10, 0.5);
+            padding: 20px; border-right: 1px solid var(--vidrio);
+        }
+
+        .nav-item {
+            padding: 15px; border-radius: 12px; cursor: pointer;
+            margin-bottom: 8px; transition: 0.3s; display: flex; align-items: center; gap: 15px;
+            color: #888;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--vidrio); color: var(--naranja-neon);
+            box-shadow: inset 0 0 10px rgba(255,87,34,0.1);
+        }
+
+        /* Área de Contenido */
+        main { flex-grow: 1; padding: 30px; overflow-y: auto; scroll-behavior: smooth; }
+
+        .section { display: none; }
+        .section.active { display: block; animation: fadeInUp 0.6s ease forwards; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- COMPONENTES DE VIDEO --- */
+        .video-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;
+        }
+
+        .video-card {
+            background: #111; border-radius: 15px; overflow: hidden;
+            border: 1px solid var(--vidrio); transition: 0.4s; cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: scale(1.03); border-color: var(--naranja-neon);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .thumbnail {
+            height: 160px; background: #222; position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .play-icon { font-size: 40px; opacity: 0; transition: 0.3s; }
+        .video-card:hover .play-icon { opacity: 1; color: var(--naranja-neon); }
+
+        .video-info { padding: 15px; }
+        .video-info h4 { margin-bottom: 5px; font-size: 1rem; }
+        .video-info p { color: #666; font-size: 0.85rem; }
+
+        /* Botón Subir */
+        .btn-upload {
+            background: var(--naranja-neon); color: black; font-weight: bold;
+            padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-upload:hover { box-shadow: 0 0 20px var(--naranja-glow); transform: translateY(-2px); }
+
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">🐐 LA CABRA NEGRA</div>
-        <div class="search"><input type="text" placeholder="Buscar videos..."></div>
-        <button class="upload-btn" onclick="subirVideo()">SUBIR</button>
-    </nav>
 
-    <div class="main-layout">
-        <aside class="sidebar">
-            <p>🏠 Inicio</p>
-            <p>🔥 Tendencias</p>
-            <hr>
-            <p>📁 Mi Canal</p>
+    <div class="bg-glow"></div>
+
+    <header>
+        <div class="logo">LA CABRA NEGRA</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Explorar videos, streamers...">
+        </div>
+        <button class="btn-upload">SUBIR VIDEO</button>
+    </header>
+
+    <div class="main-container">
+        <aside>
+            <div class="nav-item active" onclick="showTab('inicio', this)">🏠 Inicio</div>
+            <div class="nav-item" onclick="showTab('tendencias', this)">🔥 Tendencias</div>
+            <div class="nav-item" onclick="showTab('mi-canal', this)">👤 Mi Canal</div>
+            <div class="nav-item" onclick="showTab('ajustes', this)">⚙️ Ajustes</div>
         </aside>
 
-        <section class="video-feed" id="feed">
-            <!-- Los videos aparecerán aquí -->
-        </section>
+        <main id="view-port">
+            
+            <section id="inicio" class="section active">
+                <h2 style="margin-bottom: 25px;">Recomendados</h2>
+                <div class="video-grid" id="grid-videos">
+                    </div>
+            </section>
+
+            <section id="tendencias" class="section">
+                <h2 style="margin-bottom: 25px;">Lo más pegado 🔥</h2>
+                <div class="video-grid" id="grid-tendencias"></div>
+            </section>
+
+            <section id="mi-canal" class="section">
+                <div style="background: var(--vidrio); padding: 40px; border-radius: 20px; text-align: center;">
+                    <div style="width: 100px; height: 100px; background: var(--naranja-neon); border-radius: 50%; margin: 0 auto 20px;"></div>
+                    <h2>Tu Canal Oficial</h2>
+                    <p style="color: #888;">0 Seguidores • 0 Videos</p>
+                    <button class="btn-upload" style="margin-top: 20px;">Personalizar Canal</button>
+                </div>
+            </section>
+
+        </main>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // --- BASE DE DATOS DE EJEMPLO ---
+        const videosData = [
+            { titulo: "Tutorial de Git en Canaima", autor: "Admin", vistas: "1.2k" },
+            { titulo: "Gameplay La Cabra Negra", autor: "GamerPro", vistas: "5.6k" },
+            { titulo: "Directo de Programación", autor: "DevUser", vistas: "800" },
+            { titulo: "Música para Programar", autor: "LoFi", vistas: "10k" }
+        ];
+
+        // Función para cargar videos automáticamente
+        function cargarVideos() {
+            const grid = document.getElementById('grid-videos');
+            const gridTendencias = document.getElementById('grid-tendencias');
+            
+            let html = '';
+            videosData.forEach(v => {
+                html += `
+                    <div class="video-card">
+                        <div class="thumbnail"><span class="play-icon">▶</span></div>
+                        <div class="video-info">
+                            <h4>${v.titulo}</h4>
+                            <p>${v.autor}</p>
+                            <p>${v.vistas} vistas</p>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+            gridTendencias.innerHTML = html; // Reutilizamos por ahora
+        }
+
+        // --- SISTEMA DE NAVEGACIÓN ---
+        function showTab(id, elemento) {
+            // Ocultar secciones
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            // Quitar clase activa de botones
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            
+            // Mostrar la seleccionada
+            document.getElementById(id).classList.add('active');
+            elemento.classList.add('active');
+        }
+
+        // Ejecutar al cargar
+        window.onload = cargarVideos;
+    </script>
 </body>
 </html>
