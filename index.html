@@ -45,7 +45,15 @@
             text-transform: uppercase;
         }
 
-        /* Buscador Estilo YouTube */
+        .balance-badge {
+            background: rgba(0, 255, 127, 0.1);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
         .search-area { padding: 10px 20px; }
         #main-search {
             width: 100%;
@@ -76,16 +84,6 @@
         }
         .tag.active { background: white; color: black; }
 
-        .balance-badge {
-            background: rgba(0, 255, 127, 0.1);
-            border: 1px solid var(--neon-green);
-            color: var(--neon-green);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-
-        /* Cuadrícula */
         .video-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -115,10 +113,8 @@
             border-radius: 4px;
             cursor: pointer;
             width: 100%;
-            display: none;
         }
 
-        /* Panel Admin */
         #admin-panel {
             background: rgba(255, 0, 0, 0.05);
             border: 1px solid #ff4444;
@@ -149,10 +145,9 @@
 
 <div id="login-screen">
     <div class="logo" style="font-size: 3rem;">GOAT</div>
-    <button id="login-btn" onclick="login()" style="margin-top:20px; padding: 12px 40px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold;">
+    <button onclick="login()" style="margin-top:20px; padding: 15px 40px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; background: white; color: black;">
         INICIAR SESIÓN CON GOOGLE
     </button>
-    <p id="loading-msg" style="display:none; margin-top:20px;">Cargando tu cuenta...</p>
 </div>
 
 <header>
@@ -172,12 +167,13 @@
 </div>
 
 <div id="admin-panel">
-    <h3 style="color: #ff4444; margin: 0 0 10px 0; font-size: 0.9rem;">🛠️ GESTIÓN DE DIRECTOR</h3>
-    <input type="text" id="target-id" style="width:100%; padding:10px; background:#111; color:white; border:1px solid #444; border-radius:5px;" placeholder="ID del Usuario...">
+    <h3 style="color: #ff4444; margin: 0 0 10px 0; font-size: 0.9rem;">🛠️ GESTIÓN DE DIRECTOR (LETHNIBEL)</h3>
+    <input type="text" id="target-id" style="width:100%; padding:10px; background:#111; color:white; border:1px solid #444; border-radius:5px;" placeholder="Pega el ID del Usuario aquí...">
     <div class="admin-controls">
         <button class="admin-btn" style="background:#25d366;" onclick="modificarSaldo(1.00)">+ $1.00</button>
+        <button class="admin-btn" style="background:#25d366;" onclick="modificarSaldo(5.00)">+ $5.00</button>
         <button class="admin-btn" style="background:#ff4444; color:white;" onclick="modificarSaldo(-1.00)">- $1.00</button>
-        <button class="admin-btn" style="background:#444; color:white;" onclick="verUsuarios()">👥 Ver Usuarios</button>
+        <button class="admin-btn" style="background:#444; color:white;" onclick="verUsuarios()">👥 Ver Usuarios/IDs</button>
     </div>
 </div>
 
@@ -202,10 +198,9 @@
     const db = firebase.database();
     let esAdmin = false;
 
-    // --- NUEVO: ESCUCHADOR DE SESIÓN ACTIVA ---
+    // Persistencia y Escuchador de Sesión
     auth.onAuthStateChanged((user) => {
         if (user) {
-            // Si hay usuario, entramos directo
             document.getElementById('login-screen').style.display = 'none';
             if(user.email === ADMIN_EMAIL) {
                 esAdmin = true;
@@ -213,18 +208,15 @@
             }
             setupUser(user);
         } else {
-            // Si no hay usuario, mostramos el botón de login
             document.getElementById('login-screen').style.display = 'flex';
         }
     });
 
     function login() {
-        // Configuramos la persistencia en el navegador (Local)
-        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-            .then(() => {
-                return auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-            })
-            .catch((error) => alert("Error al iniciar sesión: " + error.message));
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            return auth.signInWithRedirect(provider);
+        });
     }
 
     function setupUser(user) {
@@ -250,7 +242,7 @@
                         <div class="video-info">
                             <strong style="color:var(--neon-blue);">${v.titulo || 'VIP ADS'}</strong><br>
                             <small>Por: ${v.user}</small>
-                            ${esAdmin ? <button class="delete-btn" style="display:block; margin-top:5px;" onclick="eliminarVideo('${key}')">Eliminar</button> : ''}
+                            ${esAdmin ? <button class="delete-btn" style="margin-top:5px;" onclick="eliminarVideo('${key}')">❌ Eliminar</button> : ''}
                         </div>
                     </div>`;
             });
@@ -258,8 +250,8 @@
     }
 
     function postContenido() {
-        const tipo = confirm("¿Es un YouTube SHORT? (Aceptar para SHORT / Cancelar para VIDEO)") ? 'short' : 'video';
-        const titulo = prompt("Título:");
+        const tipo = confirm("¿Es un YouTube SHORT? (Aceptar = SHORT / Cancelar = VIDEO)") ? 'short' : 'video';
+        const titulo = prompt("Título del Proyecto:");
         const link = prompt("Link de YouTube:");
         if(link && titulo) {
             const id = link.split('v=')[1] || link.split('/').pop().split('?')[0];
@@ -268,19 +260,19 @@
     }
 
     function modificarSaldo(amt) {
-        const userId = document.getElementById('target-id').value;
+        const userId = document.getElementById('target-id').value.trim();
         if(!userId) return alert("Pega el ID del usuario primero");
         db.ref('users/' + userId + '/balance').transaction(c => (c || 0) + amt);
     }
 
     function eliminarVideo(key) {
-        if(confirm("¿Borrar video?")) db.ref('videos/' + key).remove();
+        if(confirm("¿Seguro que quieres borrarlo?")) db.ref('videos/' + key).remove();
     }
 
     function verUsuarios() {
         db.ref('users').once('value', (s) => {
-            let lista = "USUARIOS ACTIVOS:\n\n";
-            s.forEach(u => { lista += ${u.val().name} | ID: ${u.key}\n\n; });
+            let lista = "LISTA DE USUARIOS (Copia el ID):\n\n";
+            s.forEach(u => { lista += ${u.val().name} | Saldo: $${u.val().balance.toFixed(2)} | ID: ${u.key}\n\n; });
             alert(lista);
         });
     }
