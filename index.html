@@ -2,119 +2,159 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GOAT GLOBAL ADS | Red Global</title>
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>GOAT GLOBAL ADS | Oficial</title>
     <style>
         :root {
-            --glass: rgba(15, 15, 15, 0.85);
+            --glass: rgba(30, 30, 30, 0.8);
             --neon: #00ffff;
             --border: rgba(255, 255, 255, 0.1);
         }
 
-        body, html { margin: 0; padding: 0; background: #000; color: white; font-family: 'Segoe UI', sans-serif; height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { margin: 0; padding: 0; background: #000; color: white; font-family: 'Roboto', sans-serif; height: 100vh; overflow: hidden; }
 
-        /* HEADER GLASS */
+        /* --- HEADER --- */
         header {
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000;
+            background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 15px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border); z-index: 1000;
         }
+        .logo { font-weight: 900; color: white; text-shadow: 0 0 10px var(--neon); }
+        .logo span { color: var(--neon); }
 
-        /* FEED DE VIDEOS */
-        .feed { height: calc(100vh - 145px); overflow-y: auto; padding-bottom: 90px; }
-        .video-card { background: var(--glass); border: 1px solid var(--border); border-radius: 15px; margin: 15px; overflow: hidden; backdrop-filter: blur(10px); }
-        .video-box { width: 100%; aspect-ratio: 16/9; }
+        /* --- CONTENEDOR DE PANTALLAS --- */
+        .main-container { height: calc(100vh - 140px); overflow-y: auto; position: relative; }
+        
+        /* CADA SECCIÓN ES UNA PANTALLA PROPIA */
+        .page { display: none; width: 100%; height: 100%; padding: 15px; }
+        .page.active { display: block; }
+
+        /* --- VIDEOS (Recuadro Negro Grande) --- */
+        .video-card { background: #111; border: 1px solid var(--border); border-radius: 15px; margin-bottom: 20px; overflow: hidden; }
+        .video-box { width: 100%; aspect-ratio: 16/9; background: #000; }
         iframe { width: 100%; height: 100%; border: none; }
-        .meta { padding: 12px; display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 35px; height: 35px; border-radius: 50%; background: var(--neon); box-shadow: 0 0 10px var(--neon); }
+        .video-info { padding: 12px; display: flex; gap: 10px; align-items: center; }
+        .v-avatar { width: 35px; height: 35px; border-radius: 50%; background: var(--neon); }
 
-        /* NAV INFERIOR */
+        /* --- NAVEGACIÓN INFERIOR --- */
         nav {
             position: fixed; bottom: 0; width: 100%; height: 75px;
-            background: var(--glass); backdrop-filter: blur(20px); border-top: 1px solid var(--border);
+            background: var(--glass); backdrop-filter: blur(15px); border-top: 1px solid var(--border);
             display: flex; justify-content: space-around; align-items: center; z-index: 2000;
         }
-        .nav-btn { text-align: center; color: #777; flex: 1; cursor: pointer; }
-        .nav-btn.active { color: white; text-shadow: 0 0 10px white; }
+        .nav-btn { text-align: center; color: #777; flex: 1; cursor: pointer; font-size: 10px; }
+        .nav-btn.active { color: white; }
+        .nav-btn i { font-size: 24px; display: block; font-style: normal; margin-bottom: 3px; }
 
-        .btn-plus { width: 50px; height: 50px; background: #000; border: 2px solid var(--neon); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; margin-top: -35px; box-shadow: 0 0 15px var(--neon); }
+        .btn-plus {
+            width: 50px; height: 50px; background: #000; border: 2px solid var(--neon);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 30px; margin-top: -40px; box-shadow: 0 0 15px var(--neon);
+        }
 
-        /* MODAL */
-        #modal-pub { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000; flex-direction: column; justify-content: center; padding: 40px; }
-        input { background: #111; border: 1px solid var(--neon); color: white; padding: 15px; border-radius: 12px; width: 100%; margin-bottom: 20px; outline: none; }
-        button { background: white; color: black; padding: 15px; border-radius: 12px; font-weight: bold; border: none; width: 100%; cursor: pointer; }
+        /* --- MODAL DE SUBIDA --- */
+        #modal-upload {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            z-index: 5000; flex-direction: column; justify-content: center; padding: 30px;
+        }
+        #modal-upload input { background: #222; border: 1px solid var(--neon); color: white; padding: 15px; border-radius: 10px; width: 100%; margin-bottom: 15px; }
+        #modal-upload button { background: white; color: black; padding: 15px; border-radius: 10px; font-weight: bold; border: none; width: 100%; }
     </style>
 </head>
 <body>
 
     <header>
-        <div style="font-weight:900; letter-spacing:1px;">💎 GOAT <span style="color:var(--neon)">GLOBAL ADS</span></div>
-        <div style="font-size:18px;">🔍</div>
+        <div class="logo">💎 GOAT <span>GLOBAL ADS</span></div>
+        <div style="font-size: 20px;">🔍</div>
     </header>
 
-    <div class="feed" id="global-feed">
-        </div>
+    <div class="main-container">
+        <section id="p-inicio" class="page active">
+            <div id="feed-global">
+                </div>
+        </section>
 
-    <div id="modal-pub">
-        <h2 style="text-align:center">Compartir con el Mundo</h2>
-        <input type="text" id="video-url" placeholder="Pega el enlace de YouTube">
-        <button onclick="publishToCloud()">PUBLICAR AHORA</button>
-        <p onclick="closeM()" style="text-align:center; margin-top:20px; opacity:0.5; cursor:pointer;">Cancelar</p>
+        <section id="p-shorts" class="page">
+            <h2 style="text-align: center;">🔥 GOAT SHORTS</h2>
+            <p style="text-align: center; color: #555;">Contenido vertical próximamente...</p>
+        </section>
+
+        <section id="p-historial" class="page">
+            <h2>🕒 Tu Historial</h2>
+            <p style="color: #555;">Aquí verás los videos que has visto recientemente.</p>
+        </section>
+
+        <section id="p-perfil" class="page">
+            <div style="text-align: center; padding-top: 30px;">
+                <div style="width:90px; height:90px; border:2px solid var(--neon); border-radius:50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 35px; background: #111;">L</div>
+                <h2 style="margin:0;">Lethnibel Ordóñez</h2>
+                <p style="color:var(--neon);">Director Ejecutivo</p>
+                
+                <div style="background:var(--glass); padding:25px; border-radius:20px; margin-top:30px; border:1px solid var(--border);">
+                    <p style="font-size:12px; color:#aaa;">BALANCE GOAT</p>
+                    <h1 style="color:#00ff00; font-size:40px; margin:10px 0;">$1,250.00</h1>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="modal-upload">
+        <h2 style="text-align:center">Publicar Campaña</h2>
+        <input type="text" id="video-url" placeholder="Pega el link de YouTube aquí">
+        <button onclick="publicarVideo()">SUBIR AHORA</button>
+        <p onclick="toggleModal(false)" style="text-align:center; margin-top:20px; opacity:0.5; cursor:pointer;">Cancelar</p>
     </div>
 
     <nav>
-        <div class="nav-btn active">🏠 Inicio</div>
-        <div class="nav-btn">🔥 Shorts</div>
-        <div class="btn-plus" onclick="openM()">+</div>
-        <div class="nav-btn">🕒 Historial</div>
-        <div class="nav-btn">👤 Tú</div>
+        <div class="nav-btn active" onclick="navegar('p-inicio', this)"><i>🏠</i>Inicio</div>
+        <div class="nav-btn" onclick="navegar('p-shorts', this)"><i>🔥</i>Shorts</div>
+        <div class="btn-plus" onclick="toggleModal(true)">+</div>
+        <div class="nav-btn" onclick="navegar('p-historial', this)"><i>🕒</i>Historial</div>
+        <div class="nav-btn" onclick="navegar('p-perfil', this)"><i>👤</i>Tú</div>
     </nav>
 
     <script>
-        // CONFIGURACIÓN DE TU NUBE (Actívalo creando un proyecto en Firebase console)
-        const firebaseConfig = {
-            databaseURL: "https://TU-PROYECTO.firebaseio.com" 
-        };
-        // firebase.initializeApp(firebaseConfig);
-        // const db = firebase.database().ref('videos');
-
-        function openM() { document.getElementById('modal-pub').style.display = 'flex'; }
-        function closeM() { document.getElementById('modal-pub').style.display = 'none'; }
-
-        // ESTA FUNCIÓN HARÁ QUE EL VIDEO SE GUARDE PARA TODOS
-        function publishToCloud() {
-            const url = document.getElementById('video-url').value;
-            if(!url) return;
+        // --- FUNCIÓN PARA CAMBIAR DE PANTALLA ---
+        function navegar(pantallaId, boton) {
+            // Ocultar todas las páginas
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Quitar brillo a todos los botones
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             
-            let id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop().split('?')[0];
-            
-            // Simulación de envío a la nube
-            const newVideo = { id: id, timestamp: Date.now() };
-            
-            // Aquí enviarías a Firebase: db.push(newVideo);
-            
-            renderVideo(newVideo); // Se muestra al instante
-            closeM();
-            alert("¡Video publicado globalmente!");
+            // Mostrar la seleccionada
+            document.getElementById(pantallaId).classList.add('active');
+            boton.classList.add('active');
         }
 
-        function renderVideo(video) {
-            const wall = document.getElementById('global-feed');
+        // --- MANEJO DEL MODAL DE SUBIDA ---
+        function toggleModal(show) {
+            document.getElementById('modal-upload').style.display = show ? 'flex' : 'none';
+        }
+
+        // --- FUNCIÓN PARA SUBIR Y VER EL VIDEO ---
+        function publicarVideo() {
+            const url = document.getElementById('video-url').value;
+            if(!url) return alert("Por favor, pega un link válido.");
+
+            // Extraer ID de YouTube
+            let videoId = "";
+            if(url.includes('v=')) {
+                videoId = url.split('v=')[1].split('&')[0];
+            } else {
+                videoId = url.split('/').pop().split('?')[0];
+            }
+
+            // Crear la tarjeta de video
+            const feed = document.getElementById('feed-global');
             const card = document.createElement('div');
             card.className = "video-card";
             card.innerHTML = `
-                <div class="video-box"><iframe src="https://www.youtube.com/embed/${video.id}"></iframe></div>
-                <div class="meta"><div class="avatar"></div><div><b>Usuario Global</b><p style="margin:0; font-size:12px; color:#666;">Publicado ahora</p></div></div>`;
-            wall.prepend(card);
-        }
-
-        // Carga inicial
-        window.onload = () => {
-            renderVideo({id: 'YlEK3J076-U'});
-            renderVideo({id: 'dQw4w9WgXcQ'});
-        };
-    </script>
-</body>
-</html>
+                <div class="video-box">
+                    <iframe src="https://www.youtube.com/embed/${videoId}?rel=0" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <div class="v-avatar"></div>
+                    <div>
+                        <h3 style="margin:0; font-size:14px;">Campaña Publicada</h3>
+                        <p style="margin:4px 0 0; font-size:12px; color
