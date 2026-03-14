@@ -3,168 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT GLOBAL ADS - PRO</title>
-
-<!-- Firebase -->
+<title>GOAT GLOBAL ADS - Versión Final Profesional</title>
+<!-- Firebase SDK 9.17.1 compat -->
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
 
 <style>
+/* ========================== VARIABLES NEÓN ========================== */
 :root {
     --neon-blue: #00f2ff;
     --neon-purple: #bc13fe;
-    --neon-red: #ff4d4d;
-    --bg-dark: #0a0a0a;
+    --bg-color: #000;
     --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.15);
-    --text-main: #ffffff;
-    --transition-fast: 0.3s;
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --font-family: 'Arial', sans-serif;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Roboto, sans-serif; }
-body { background: var(--bg-dark); color: var(--text-main); min-height:100vh; overflow-x:hidden; }
-h2,h3,h4 { font-weight:500; margin-bottom:10px; }
-
-header {
-    padding:20px; text-align:center; border-bottom:1px solid var(--neon-blue);
-}
-.logo {
-    font-size:2rem; font-weight:bold; color: var(--neon-blue);
-    text-transform:uppercase; letter-spacing:3px;
-    text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
 }
 
-.container { padding:20px; padding-bottom:120px; max-width:800px; margin:0 auto; }
-
-.glass-card {
-    background: var(--glass-bg);
-    border:1px solid var(--glass-border);
-    border-radius:15px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.8);
-    padding:20px;
-    margin-bottom:25px;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+body {
+    background-color: var(--bg-color);
+    color: var(--neon-blue);
 }
-.glass-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.9); }
 
-input, select {
-    width:100%; padding:12px; margin:10px 0;
-    background: rgba(255,255,255,0.1); border:1px solid var(--glass-border);
-    color:#fff; border-radius:10px;
-    transition: border-color var(--transition-fast), background var(--transition-fast);
-}
-input:focus { border-color: var(--neon-blue); background: rgba(0,0,0,0.2); outline:none; }
-
-.btn-action {
-    width:100%; padding:15px; border:none; border-radius:10px;
-    font-weight:bold; text-transform:uppercase; cursor:pointer;
-    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
-}
-.btn-action:hover { transform: translateY(-3px); box-shadow:0 0 15px var(--neon-blue); }
-
-.btn-blue { background: var(--neon-blue); color:#000; }
-.btn-purple { background: var(--neon-purple); color:#fff; }
-
-.video-item { margin-bottom:25px; }
-.video-wrapper { position:relative; padding-bottom:56.25%; height:0; border-radius:10px; overflow:hidden; }
-.video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:10px; }
-
-#login-screen { height:80vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
-
+/* ========================== NAVEGACIÓN SPA ========================== */
 nav {
-    position:fixed; bottom:0; width:100%;
-    display:flex; justify-content:space-around;
-    padding:15px; background: rgba(0,0,0,0.9);
-    border-top:1px solid var(--neon-purple); z-index:1000;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--glass-bg);
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
 }
-nav button { background:none; border:none; color:#fff; font-size:0.9rem; cursor:pointer; transition:0.3s; }
-nav button.active { color: var(--neon-blue); text-shadow:0 0 8px var(--neon-blue); }
 
-.section { display:none; }
-.section.active { display:block; animation: fadeIn 0.5s ease; }
-@keyframes fadeIn { from {opacity:0} to {opacity:1} }
+nav button {
+    background: none;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-.admin-only { display:none; }
+nav button:hover {
+    background-color: var(--neon-purple);
+    border-color: var(--neon-purple);
+}
 
-p { font-size:0.9rem; color:#ccc; }
+/* ========================== CONTENIDO ========================== */
+.tab-content {
+    display: none;
+    padding: 1rem;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ========================== TARJETAS GLASSMORPHISM ========================== */
+.card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 1rem;
+    margin: 1rem 0;
+    backdrop-filter: blur(10px);
+}
+
+/* ========================== BOTONES ========================== */
+button.primary {
+    background-color: var(--neon-blue);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    color: #000;
+    cursor: pointer;
+    margin: 0.5rem 0;
+}
+
+button.primary:hover {
+    background-color: var(--neon-purple);
+}
+
+/* ========================== RESPONSIVE ========================== */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+    }
+}
 </style>
 </head>
 <body>
 
-<header>
-    <div class="logo">GOAT GLOBAL ADS</div>
-</header>
-
-<div class="container">
-
-    <!-- LOGIN -->
-    <div id="login-screen" class="section active">
-        <h2>Bienvenido a la Élite</h2>
-        <input type="email" id="login-email" placeholder="Ingresa tu correo electrónico" required>
-        <button class="btn-action btn-blue" onclick="loginWithEmail()">Enviar enlace de acceso</button>
-        <p>Revisa tu correo para iniciar sesión.</p>
-    </div>
-
-    <!-- INICIO -->
-    <div id="inicio" class="section">
-        <div class="glass-card video-item">
-            <h3>Publicar Nuevo Video</h3>
-            <input type="text" id="video-url" placeholder="Pega URL de YouTube o Shorts">
-            <button class="btn-action btn-purple" onclick="publicarVideo()">Subir a la Red</button>
-        </div>
-        <div id="feed-general"></div>
-    </div>
-
-    <!-- SHORTS -->
-    <div id="shorts" class="section">
-        <h2 style="color: var(--neon-purple); margin-bottom: 15px;">TOP SHORTS</h2>
-        <div id="feed-shorts"></div>
-    </div>
-
-    <!-- PANEL USUARIO -->
-    <div id="panel" class="section">
-        <div class="glass-card">
-            <h3>Mis Estadísticas</h3>
-            <p id="user-info"></p>
-            <p>Saldo Actual: <span id="user-balance" style="color: var(--neon-blue);">$0.00</span></p>
-            <button onclick="logout()" style="background:none; color:red; border:none; cursor:pointer; margin-top:10px;">Cerrar Sesión</button>
-        </div>
-        <h3>Mis Publicaciones</h3>
-        <div id="feed-usuario"></div>
-    </div>
-
-    <!-- PANEL DIRECTOR -->
-    <div id="director" class="section">
-        <h2 style="color: var(--neon-red); margin-bottom:20px;">PANEL DIRECTOR</h2>
-        <div class="glass-card">
-            <h4>Gestión de Balances</h4>
-            <input type="text" id="admin-user-id" placeholder="ID de Usuario (UID)">
-            <input type="number" id="admin-amount" placeholder="Cantidad ($)">
-            <div style="display:flex; gap:10px;">
-                <button class="btn-action btn-blue" onclick="ajustarSaldo('sumar')">Sumar</button>
-                <button class="btn-action btn-purple" onclick="ajustarSaldo('resetear')">Resetear</button>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<nav id="main-nav" style="display:none;">
-    <button onclick="showSection('inicio')" id="btn-inicio">INICIO</button>
-    <button onclick="showSection('shorts')" id="btn-shorts">SHORTS</button>
-    <button onclick="showSection('panel')" id="btn-panel">MI PANEL</button>
-    <button onclick="showSection('director')" id="btn-director" class="admin-only">DIRECTOR</button>
+<nav>
+    <button data-tab="home">Inicio</button>
+    <button data-tab="shorts">Shorts</button>
+    <button data-tab="panel">Mi Panel</button>
+    <button data-tab="director">Director</button>
+    <button id="loginBtn">Login con Google</button>
+    <button id="logoutBtn" style="display:none;">Cerrar Sesión</button>
 </nav>
 
+<!-- ========================== CONTENIDO SPA ========================== -->
+<div id="home" class="tab-content active">
+    <h2>Muro VIP</h2>
+    <div id="videoFeed"></div>
+</div>
+
+<div id="shorts" class="tab-content">
+    <h2>Shorts</h2>
+    <div id="shortsFeed"></div>
+</div>
+
+<div id="panel" class="tab-content">
+    <h2>Mi Panel</h2>
+    <div id="userVideos"></div>
+    <h3>Publicar Video</h3>
+    <input type="text" id="videoUrl" placeholder="URL de YouTube" style="width:80%;">
+    <button class="primary" id="publishBtn">Publicar</button>
+</div>
+
+<div id="director" class="tab-content">
+    <h2>Panel Director</h2>
+    <input type="text" id="searchUid" placeholder="Buscar por UID">
+    <button class="primary" id="searchUserBtn">Buscar Usuario</button>
+    <div id="adminControls"></div>
+</div>
+
 <script>
+// ========================== CONFIG FIREBASE ==========================
 const firebaseConfig = {
-    apiKey: "AIzaSyDh_u5eDv_fnSUXiDsHs-iJKZFgtOV3Jgw",
-    authDomain: "flutter-ai-playground-93f86.firebaseapp.com",
-    databaseURL: "https://flutter-ai-playground-93f86-default-rtdb.firebaseio.com/",
-    projectId: "flutter-ai-playground-93f86",
-    storageBucket: "flutter-ai-playground-93f86.firebasestorage.app",
-    messagingSenderId: "912054292680",
-    appId: "1:912054292680:web:80b3c73a7c669a061b95
+  apiKey: "AIzaSyDh_u5eDv_fnSUXiDsHs-iJKZFgtOV3Jgw",
+  authDomain: "flutter-ai-playground-93f86.firebaseapp.com",
+  databaseURL: "https://flutter-ai-playground-93f86-default-rtdb.firebaseio.com/",
+  projectId: "flutter-ai-playground-93f86",
+  storageBucket: "flutter-ai-playground-93f86.firebasestorage.app",
+  messagingSenderId: "912054292680",
+  appId: "1:912054292680:web:80b3c73a7c669a061b95fd"
+};
+const ADMIN_EMAIL = "Lethnibel@gmail.com";
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+// ========================== LOGIN GOOGLE ==========================
+const loginBtn = document.getElementById('loginBtn');
+const logoutBtn = document.getElementById('logoutBtn');
+
+const provider = new firebase.auth.GoogleAuthProvider();
+
+loginBtn.addEventListener('click', () => {
+    auth.signInWithRedirect(provider);
+});
+
+logoutBtn.addEventListener('click', () => {
+    auth.signOut();
+});
+
+auth.onAuthStateChanged(user => {
+    if(user){
+        loginBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+        if(user.email !== ADMIN_EMAIL){
+            document.querySelector('[data-tab="director"]').style.display = 'none';
+        }
+        loadVideos();
+        loadUserVideos();
+    } else {
+        loginBtn.style.display = "inline-block";
+        logoutBtn.style.display = "none";
+        document.querySelector('[data-tab="director"]').style.display = 'inline-block';
+    }
+});
+
+// Captura el resultado del redirect
+auth.getRedirectResult().then(result => {
+    if(result.user){
+        console.log("Sesión iniciada:", result.user.displayName);
+    }
+}).catch(error => console.error(error));
+
+// ========================== SPA NAVEGACIÓN ==========================
+const tabs = document.querySelectorAll('nav button[data-tab]');
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
+
+// ========================== GESTIÓN DE VIDEOS ==========================
+function extractYouTubeID(url) {
+    const regex = /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+}
+
+const publishBtn = document.getElementById('publishBtn');
+publishBtn.addEventListener('click', () => {
+    const url = document.getElementById('videoUrl').value;
+    const videoID = extractYouTubeID(url);
+    if(!videoID){
+        alert("URL de YouTube inválida");
+        return;
+    }
+    const user = auth.currentUser;
+    if(!user) return alert("Debes iniciar sesión");
+    const videoRef = db.ref('videos').push();
+    videoRef.set({
+        videoID,
+        uid: user.uid,
+        author: user.displayName,
+        timestamp: Date.now()
+    }).then(()=> {
+        alert("Video publicado!");
+        document.getElementById('videoUrl').value = '';
+        loadVideos();
+        loadUserVideos();
+    });
+});
+
+// ========================== CARGA DE VIDEOS ==========================
+function loadVideos(){
+    const feed = document.getElementById('videoFeed');
+    feed.innerHTML = '';
+    db.ref('videos').orderByChild('timestamp').limitToLast(50).once('value', snapshot => {
+        snapshot.forEach(child => {
+            const data = child.val();
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.innerHTML = `<p><strong>${data.author}</strong></p>
+                              <iframe width="100%" height="200" src="https://www.youtube.com/embed/${data.videoID}" frameborder="0" allowfullscreen></iframe>`;
+            feed.prepend(card);
+        });
+    });
+}
+
+function loadUserVideos(){
+    const panel = document.getElementById('userVideos');
+    panel.innerHTML = '';
+    const user = auth.currentUser
