@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOAT GLOBAL ADS - Versión Final Profesional</title>
-<!-- Firebase SDK 9.17.1 compat -->
+
+<!-- Firebase SDK Compat -->
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
@@ -17,7 +18,7 @@
     --bg-color: #000;
     --glass-bg: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.2);
-    --font-family: 'Arial', sans-serif;
+    --font-family: 'Inter', 'Arial', sans-serif;
 }
 
 * {
@@ -99,10 +100,154 @@ button.primary:hover {
         flex-direction: column;
     }
 }
+
+/* ========================== MENÚ CHAT PROFESIONAL ========================== */
+#chatContainer {
+    display: flex;
+    height: 100vh;
+    background-color: #0b0d0e;
+    overflow: hidden;
+}
+
+/* Sidebar */
+#chatSidebar {
+    width: 260px;
+    background: rgba(255,255,255,0.05);
+    border-right: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease;
+}
+
+#chatSidebar.collapsed {
+    width: 60px;
+}
+
+#newChatBtn {
+    margin: 1rem;
+    padding: 0.5rem;
+    border: 1px solid var(--neon-blue);
+    border-radius: 15px;
+    background: none;
+    color: var(--neon-blue);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#newChatBtn:hover {
+    background-color: var(--neon-purple);
+    border-color: var(--neon-purple);
+}
+
+/* Historial de chats */
+#chatHistory {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+#chatHistory::-webkit-scrollbar {
+    width: 0;
+}
+
+.chatItem {
+    padding: 0.5rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: 0.3s;
+}
+
+.chatItem:hover {
+    background-color: var(--neon-blue);
+    color: #000;
+}
+
+/* Footer perfil */
+#chatSidebarFooter {
+    padding: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Área de mensajes */
+#chatMain {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#messageArea {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.message {
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.05);
+    max-width: 70%;
+    transition: 0.3s;
+}
+
+.message.user {
+    background: var(--neon-blue);
+    color: #000;
+    margin-left: auto;
+}
+
+/* Input box */
+#chatInputContainer {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+#chatInput {
+    width: 100%;
+    max-width: 800px;
+    padding: 0.75rem 1rem;
+    border-radius: 50px;
+    border: 1px solid var(--neon-blue);
+    outline: none;
+    background: rgba(255,255,255,0.05);
+    color: var(--neon-blue);
+}
+
+#sendBtn {
+    margin-left: 0.5rem;
+    padding: 0 1rem;
+    border-radius: 50px;
+    border: none;
+    background: var(--neon-blue);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#sendBtn:hover {
+    background-color: var(--neon-purple);
+}
+
+/* Scroll auto */
+#messageArea {
+    scroll-behavior: smooth;
+}
 </style>
 </head>
 <body>
 
+<!-- ========================== NAVEGACIÓN ========================== -->
 <nav>
     <button data-tab="home">Inicio</button>
     <button data-tab="shorts">Shorts</button>
@@ -138,118 +283,19 @@ button.primary:hover {
     <div id="adminControls"></div>
 </div>
 
-<script>
-// ========================== CONFIG FIREBASE ==========================
-const firebaseConfig = {
-  apiKey: "AIzaSyDh_u5eDv_fnSUXiDsHs-iJKZFgtOV3Jgw",
-  authDomain: "flutter-ai-playground-93f86.firebaseapp.com",
-  databaseURL: "https://flutter-ai-playground-93f86-default-rtdb.firebaseio.com/",
-  projectId: "flutter-ai-playground-93f86",
-  storageBucket: "flutter-ai-playground-93f86.firebasestorage.app",
-  messagingSenderId: "912054292680",
-  appId: "1:912054292680:web:80b3c73a7c669a061b95fd"
-};
-const ADMIN_EMAIL = "Lethnibel@gmail.com";
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
-
-// ========================== LOGIN GOOGLE ==========================
-const loginBtn = document.getElementById('loginBtn');
-const logoutBtn = document.getElementById('logoutBtn');
-
-const provider = new firebase.auth.GoogleAuthProvider();
-
-loginBtn.addEventListener('click', () => {
-    auth.signInWithRedirect(provider);
-});
-
-logoutBtn.addEventListener('click', () => {
-    auth.signOut();
-});
-
-auth.onAuthStateChanged(user => {
-    if(user){
-        loginBtn.style.display = "none";
-        logoutBtn.style.display = "inline-block";
-        if(user.email !== ADMIN_EMAIL){
-            document.querySelector('[data-tab="director"]').style.display = 'none';
-        }
-        loadVideos();
-        loadUserVideos();
-    } else {
-        loginBtn.style.display = "inline-block";
-        logoutBtn.style.display = "none";
-        document.querySelector('[data-tab="director"]').style.display = 'inline-block';
-    }
-});
-
-// Captura el resultado del redirect
-auth.getRedirectResult().then(result => {
-    if(result.user){
-        console.log("Sesión iniciada:", result.user.displayName);
-    }
-}).catch(error => console.error(error));
-
-// ========================== SPA NAVEGACIÓN ==========================
-const tabs = document.querySelectorAll('nav button[data-tab]');
-tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-        document.getElementById(tab.dataset.tab).classList.add('active');
-    });
-});
-
-// ========================== GESTIÓN DE VIDEOS ==========================
-function extractYouTubeID(url) {
-    const regex = /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
-}
-
-const publishBtn = document.getElementById('publishBtn');
-publishBtn.addEventListener('click', () => {
-    const url = document.getElementById('videoUrl').value;
-    const videoID = extractYouTubeID(url);
-    if(!videoID){
-        alert("URL de YouTube inválida");
-        return;
-    }
-    const user = auth.currentUser;
-    if(!user) return alert("Debes iniciar sesión");
-    const videoRef = db.ref('videos').push();
-    videoRef.set({
-        videoID,
-        uid: user.uid,
-        author: user.displayName,
-        timestamp: Date.now()
-    }).then(()=> {
-        alert("Video publicado!");
-        document.getElementById('videoUrl').value = '';
-        loadVideos();
-        loadUserVideos();
-    });
-});
-
-// ========================== CARGA DE VIDEOS ==========================
-function loadVideos(){
-    const feed = document.getElementById('videoFeed');
-    feed.innerHTML = '';
-    db.ref('videos').orderByChild('timestamp').limitToLast(50).once('value', snapshot => {
-        snapshot.forEach(child => {
-            const data = child.val();
-            const card = document.createElement('div');
-            card.classList.add('card');
-            card.innerHTML = `<p><strong>${data.author}</strong></p>
-                              <iframe width="100%" height="200" src="https://www.youtube.com/embed/${data.videoID}" frameborder="0" allowfullscreen></iframe>`;
-            feed.prepend(card);
-        });
-    });
-}
-
-function loadUserVideos(){
-    const panel = document.getElementById('userVideos');
-    panel.innerHTML = '';
-    const user = auth.currentUser
+<!-- ========================== CHAT PROFESIONAL ========================== -->
+<div id="chatContainer">
+    <div id="chatSidebar">
+        <button id="newChatBtn">Nuevo Chat</button>
+        <div id="chatHistory">
+            <div class="chatItem">Chat 1</div>
+            <div class="chatItem">Chat 2</div>
+            <div class="chatItem">Chat Largo de Prueba para truncar...</div>
+        </div>
+        <div id="chatSidebarFooter">
+            <span>Usuario</span>
+            <button class="primary">⚙️</button>
+        </div>
+    </div>
+    <div id="chatMain">
+        <div id="messageArea">
