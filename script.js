@@ -25,9 +25,14 @@ console.log("Motor GOAT conectado en script.js");
 // 2. EXTRACTOR DE YOUTUBE
 // ==========================================
 function obtenerIDYouTube(url) {
-    const regExp = /^.(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]).*/;
+    // Esta versión reconoce: links normales, shorts, y links de celular (youtu.be)
+    const regExp = /^.(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]).*/;
     const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
+
+    if (match && match[2].length === 11) {
+        return match[2];
+    } else {
+        return null;
 }
 
 // Dejamos esto listo para el Paso 4
