@@ -3,299 +3,174 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT GLOBAL ADS - Versión Final Profesional</title>
-
-<!-- Firebase SDK Compat -->
-<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-
+<title>GOAT GLOBAL ADS</title>
+<!-- Google Fonts Neon -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 <style>
-/* ========================== VARIABLES NEÓN ========================== */
-:root {
-    --neon-blue: #00f2ff;
-    --neon-purple: #bc13fe;
-    --bg-color: #000;
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --font-family: 'Inter', 'Arial', sans-serif;
-}
+  /* === RESET === */
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
+  html, body { height: 100%; background: #000; color: #00f2ff; overflow-x: hidden; }
+  
+  /* === NAVIGATION === */
+  nav { display: flex; justify-content: center; gap: 2rem; padding: 1rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border-bottom: 1px solid #00f2ff; }
+  nav button { background: transparent; border: 1px solid #00f2ff; padding: 0.5rem 1rem; color: #00f2ff; cursor: pointer; border-radius: 8px; transition: 0.3s; }
+  nav button:hover { box-shadow: 0 0 10px #00f2ff, 0 0 20px #bc13fe; }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: var(--font-family);
-}
+  /* === SECTIONS === */
+  section { display: none; padding: 2rem; min-height: calc(100vh - 70px); }
+  section.active { display: block; }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--neon-blue);
-}
+  /* === CARDS === */
+  .video-card { background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); border: 1px solid #00f2ff; border-radius: 12px; margin: 1rem 0; padding: 1rem; box-shadow: 0 0 10px #00f2ff; display: flex; flex-direction: column; align-items: center; }
+  .video-card img { width: 100%; border-radius: 12px; }
+  .video-card p { margin-top: 0.5rem; text-align: center; }
 
-/* ========================== NAVEGACIÓN SPA ========================== */
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--glass-bg);
-    border-bottom: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-}
+  /* === BUTTONS === */
+  .btn { border: 1px solid #bc13fe; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; color: #bc13fe; margin: 0.5rem; transition: 0.3s; }
+  .btn:hover { box-shadow: 0 0 15px #bc13fe, 0 0 30px #00f2ff; }
 
-nav button {
-    background: none;
-    border: 1px solid var(--neon-blue);
-    color: var(--neon-blue);
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-}
+  /* === ADMIN PANEL === */
+  .admin-section { display: flex; flex-direction: column; gap: 1rem; }
+  input, select { padding: 0.5rem; border-radius: 8px; border: 1px solid #00f2ff; background: rgba(0,0,0,0.5); color: #00f2ff; }
 
-nav button:hover {
-    background-color: var(--neon-purple);
-    border-color: var(--neon-purple);
-}
-
-/* ========================== CONTENIDO ========================== */
-.tab-content {
-    display: none;
-    padding: 1rem;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-/* ========================== TARJETAS GLASSMORPHISM ========================== */
-.card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 15px;
-    padding: 1rem;
-    margin: 1rem 0;
-    backdrop-filter: blur(10px);
-}
-
-/* ========================== BOTONES ========================== */
-button.primary {
-    background-color: var(--neon-blue);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    color: #000;
-    cursor: pointer;
-    margin: 0.5rem 0;
-}
-
-button.primary:hover {
-    background-color: var(--neon-purple);
-}
-
-/* ========================== RESPONSIVE ========================== */
-@media (max-width: 768px) {
-    nav {
-        flex-direction: column;
-    }
-}
-
-/* ========================== MENÚ CHAT PROFESIONAL ========================== */
-#chatContainer {
-    display: flex;
-    height: 100vh;
-    background-color: #0b0d0e;
-    overflow: hidden;
-}
-
-/* Sidebar */
-#chatSidebar {
-    width: 260px;
-    background: rgba(255,255,255,0.05);
-    border-right: 1px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
-    display: flex;
-    flex-direction: column;
-    transition: width 0.3s ease;
-}
-
-#chatSidebar.collapsed {
-    width: 60px;
-}
-
-#newChatBtn {
-    margin: 1rem;
-    padding: 0.5rem;
-    border: 1px solid var(--neon-blue);
-    border-radius: 15px;
-    background: none;
-    color: var(--neon-blue);
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#newChatBtn:hover {
-    background-color: var(--neon-purple);
-    border-color: var(--neon-purple);
-}
-
-/* Historial de chats */
-#chatHistory {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1rem;
-}
-
-#chatHistory::-webkit-scrollbar {
-    width: 0;
-}
-
-.chatItem {
-    padding: 0.5rem;
-    border-radius: 10px;
-    margin-bottom: 0.5rem;
-    background: rgba(255,255,255,0.05);
-    cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: 0.3s;
-}
-
-.chatItem:hover {
-    background-color: var(--neon-blue);
-    color: #000;
-}
-
-/* Footer perfil */
-#chatSidebarFooter {
-    padding: 1rem;
-    border-top: 1px solid rgba(255,255,255,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-/* Área de mensajes */
-#chatMain {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-#messageArea {
-    flex: 1;
-    padding: 1rem;
-    overflow-y: auto;
-}
-
-.message {
-    padding: 0.5rem 1rem;
-    margin-bottom: 0.5rem;
-    border-radius: 15px;
-    background: rgba(255,255,255,0.05);
-    max-width: 70%;
-    transition: 0.3s;
-}
-
-.message.user {
-    background: var(--neon-blue);
-    color: #000;
-    margin-left: auto;
-}
-
-/* Input box */
-#chatInputContainer {
-    display: flex;
-    justify-content: center;
-    padding: 1rem;
-    border-top: 1px solid rgba(255,255,255,0.2);
-}
-
-#chatInput {
-    width: 100%;
-    max-width: 800px;
-    padding: 0.75rem 1rem;
-    border-radius: 50px;
-    border: 1px solid var(--neon-blue);
-    outline: none;
-    background: rgba(255,255,255,0.05);
-    color: var(--neon-blue);
-}
-
-#sendBtn {
-    margin-left: 0.5rem;
-    padding: 0 1rem;
-    border-radius: 50px;
-    border: none;
-    background: var(--neon-blue);
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#sendBtn:hover {
-    background-color: var(--neon-purple);
-}
-
-/* Scroll auto */
-#messageArea {
-    scroll-behavior: smooth;
-}
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) { .video-card { width: 90%; } nav { flex-direction: column; gap: 1rem; } }
 </style>
 </head>
 <body>
 
-<!-- ========================== NAVEGACIÓN ========================== -->
 <nav>
-    <button data-tab="home">Inicio</button>
-    <button data-tab="shorts">Shorts</button>
-    <button data-tab="panel">Mi Panel</button>
-    <button data-tab="director">Director</button>
-    <button id="loginBtn">Login con Google</button>
-    <button id="logoutBtn" style="display:none;">Cerrar Sesión</button>
+  <button onclick="showSection('home')">Inicio</button>
+  <button onclick="showSection('shorts')">Shorts</button>
+  <button onclick="showSection('mypanel')">Mi Panel</button>
+  <button onclick="showSection('director')">Director</button>
 </nav>
 
-<!-- ========================== CONTENIDO SPA ========================== -->
-<div id="home" class="tab-content active">
-    <h2>Muro VIP</h2>
-    <div id="videoFeed"></div>
+<!-- === SECTIONS === -->
+<section id="home" class="active">
+  <h1>Bienvenido a GOAT GLOBAL ADS</h1>
+  <div id="videos-home"></div>
+</section>
+
+<section id="shorts">
+  <h1>Shorts</h1>
+  <div id="videos-shorts"></div>
+</section>
+
+<section id="mypanel">
+  <h1>Mi Panel</h1>
+  <div id="my-videos"></div>
+</section>
+
+<section id="director">
+  <h1>Director Panel</h1>
+  <div id="admin-content"></div>
+</section>
+
+<!-- === LOGIN BUTTON === -->
+<div style="position:fixed; bottom:1rem; right:1rem;">
+  <button id="login-btn" class="btn">Iniciar sesión con Google</button>
+  <span id="user-info" style="margin-left:1rem;"></span>
 </div>
 
-<div id="shorts" class="tab-content">
-    <h2>Shorts</h2>
-    <div id="shortsFeed"></div>
-</div>
+<!-- === FIREBASE SDK === -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-<div id="panel" class="tab-content">
-    <h2>Mi Panel</h2>
-    <div id="userVideos"></div>
-    <h3>Publicar Video</h3>
-    <input type="text" id="videoUrl" placeholder="URL de YouTube" style="width:80%;">
-    <button class="primary" id="publishBtn">Publicar</button>
-</div>
+<script>
+  // === CONFIGURACIÓN FIREBASE ===
+  const firebaseConfig = {
+    apiKey: "AIzaSyDh_u5eDv_fnSUXiDsHs-iJKZFgtOV3Jgw",
+    authDomain: "flutter-ai-playground-93f86.firebaseapp.com",
+    databaseURL: "https://flutter-ai-playground-93f86-default-rtdb.firebaseio.com/",
+    projectId: "flutter-ai-playground-93f86",
+    storageBucket: "flutter-ai-playground-93f86.firebasestorage.app",
+    messagingSenderId: "912054292680",
+    appId: "1:912054292680:web:80b3c73a7c669a061b95fd"
+  };
+  const ADMIN_EMAIL = "Lethnibel@gmail.com";
 
-<div id="director" class="tab-content">
-    <h2>Panel Director</h2>
-    <input type="text" id="searchUid" placeholder="Buscar por UID">
-    <button class="primary" id="searchUserBtn">Buscar Usuario</button>
-    <div id="adminControls"></div>
-</div>
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
 
-<!-- ========================== CHAT PROFESIONAL ========================== -->
-<div id="chatContainer">
-    <div id="chatSidebar">
-        <button id="newChatBtn">Nuevo Chat</button>
-        <div id="chatHistory">
-            <div class="chatItem">Chat 1</div>
-            <div class="chatItem">Chat 2</div>
-            <div class="chatItem">Chat Largo de Prueba para truncar...</div>
-        </div>
-        <div id="chatSidebarFooter">
-            <span>Usuario</span>
-            <button class="primary">⚙️</button>
-        </div>
-    </div>
-    <div id="chatMain">
-        <div id="messageArea">
+  // === AUTENTICACIÓN ===
+  auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .catch(err => alert(Error de persistencia: ${err.code}));
+
+  const provider = new firebase.auth.GoogleAuthProvider();
+  document.getElementById('login-btn').onclick = () => auth.signInWithRedirect(provider);
+
+  // Captura de login redirect
+  auth.getRedirectResult()
+    .then(result => {
+      if (result.user) {
+        const user = result.user;
+        document.getElementById('user-info').textContent = user.displayName;
+        // Sincronizar usuario
+        const userRef = db.ref(users/${user.uid});
+        userRef.get().then(snapshot => {
+          if (!snapshot.exists()) {
+            userRef.set({
+              nombre: user.displayName,
+              email: user.email,
+              foto: user.photoURL,
+              balance: 0,
+              rango: "user",
+              fecha_registro: firebase.database.ServerValue.TIMESTAMP
+            });
+          }
+        }).catch(err => alert(Error DB: ${err.code}));
+      }
+    }).catch(err => alert(Login error: ${err.code}));
+
+  // === SPA NAVIGATION ===
+  function showSection(sectionId){
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+    if(sectionId==='director') loadAdminPanel();
+    if(sectionId==='mypanel') loadMyVideos();
+    if(sectionId==='home') loadVideos();
+    if(sectionId==='shorts') loadShorts();
+  }
+
+  // === MOTOR YOUTUBE ===
+  function extractYoutubeID(url){
+    const regex = /^.(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]).*/;
+    const match = url.match(regex);
+    if(match && match[2].length===11){
+      return match[2];
+    }
+    return null;
+  }
+
+  function isShort(url){ return url.includes("/shorts/"); }
+
+  // === VIDEOS DE DEMO ===
+  const demoVideos = [
+    "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "https://www.youtube.com/shorts/abcdEFGhijk"
+  ];
+
+  function renderVideo(container, url){
+    const id = extractYoutubeID(url);
+    if(!id) return;
+    const type = isShort(url) ? "short" : "normal";
+    const div = document.createElement('div');
+    div.className = "video-card";
+    div.innerHTML = `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe>
+                     <p>Tipo: ${type}</p>`;
+    container.appendChild(div);
+  }
+
+  function loadVideos(){
+    const container = document.getElementById('videos-home');
+    container.innerHTML = '';
+    demoVideos.forEach(url => { if(!isShort(url)) renderVideo(container,url); });
+  }
+
+  function loadShorts(){
+    const container = document.getElementById('videos-shorts');
+    container.innerHTML = '';
+    demoVideos.forEach(url => { if(isShort(url))
