@@ -32,3 +32,37 @@ function obtenerIDYouTube(url) {
 
 // Dejamos esto listo para el Paso 4
 export { auth, db, obtenerIDYouTube };
+// Paso 4: Lógica para enviar datos a Firebase
+const btnPublicar = document.getElementById('btn-publicar');
+
+if (btnPublicar) {
+    btnPublicar.addEventListener('click', () => {
+        const titulo = document.getElementById('video-titulo').value;
+        const urlOriginal = document.getElementById('video-url').value;
+        
+        // Usamos nuestro extractor del Paso 3
+        const idVideo = obtenerIDYouTube(urlOriginal);
+
+        if (titulo && idVideo) {
+            // Referencia a la carpeta "videos" en tu base de datos
+            const videoRef = ref(db, 'videos');
+            
+            // "Empujamos" los datos a Firebase
+            push(videoRef, {
+                nombre: titulo,
+                youtubeID: idVideo,
+                urlCompleta: urlOriginal,
+                fecha: Date.now()
+            }).then(() => {
+                alert("¡Video publicado con éxito en GOAT!");
+                // Limpiamos los campos
+                document.getElementById('video-titulo').value = "";
+                document.getElementById('video-url').value = "";
+            }).catch((error) => {
+                console.error("Error al subir:", error);
+            });
+        } else {
+            alert("Por favor, llena los campos con un link de YouTube válido.");
+        }
+    });
+}
