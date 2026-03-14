@@ -1,5 +1,5 @@
 // ==========================================
-// 1. CONFIGURACIÓN DE FIREBASE
+// 1. CONEXIÓN A TU FIREBASE
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
@@ -15,15 +15,14 @@ const firebaseConfig = {
   databaseURL: "https://flutter-ai-playground-93f86-default-rtdb.firebaseio.com/"
 };
 
-// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 
-console.log("Motor GOAT conectado a Firebase");
+console.log("Motor GOAT conectado en script.js");
 
 // ==========================================
-// 2. FUNCIONES DE INTELIGENCIA (YouTube)
+// 2. EXTRACTOR DE YOUTUBE
 // ==========================================
 function obtenerIDYouTube(url) {
     const regExp = /^.(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]).*/;
@@ -31,5 +30,5 @@ function obtenerIDYouTube(url) {
     return (match && match[2].length === 11) ? match[2] : null;
 }
 
-// Exportamos estas variables por si las necesitamos luego
+// Dejamos esto listo para el Paso 4
 export { auth, db, obtenerIDYouTube };
