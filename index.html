@@ -1,30 +1,254 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOAT GLOBAL ADS | Next Gen</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOAT GLOBAL ADS</title>
+
+  <!-- Importar Firebase SDK v10 -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js';
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js';
+    import { getFirestore, doc, setDoc, updateDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js';
+    import { getDatabase } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js';
+
+    // Configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh_u5eDv_fnSUXiDsHs-iJKZFgtOV3Jgw",
+      authDomain: "flutter-ai-playground-93f86.firebaseapp.com",
+      projectId: "flutter-ai-playground-93f86",
+      storageBucket: "flutter-ai-playground-93f86.firebasestorage.app",
+      messagingSenderId: "912054292680",
+      appId: "1:912054292680:web:80b3c73a7c669a061b95fd",
+      databaseURL: "https://flutter-ai-playground-93f86-default-rtdb.firebaseio.com/"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const realTimeDb = getDatabase(app);
+  </script>
+
+  <!-- Estilos CSS -->
+  <style>
+    body {
+      background-color: #050505;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      padding-top: 20px;
+      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      margin: 20px 0;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: #00f2ff;
+      font-size: 18px;
+      display: block;
+      padding: 10px;
+      transition: color 0.3s ease;
+    }
+
+    .sidebar a:hover {
+      color: #bc13fe;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .content {
+      margin-left: 270px;
+      margin-top: 50px;
+      padding: 20px;
+    }
+
+    button {
+      background: transparent;
+      color: #00f2ff;
+      border: 2px solid #00f2ff;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00f2ff;
+      color: #050505;
+      box-shadow: 0 0 20px #00f2ff;
+    }
+
+    #video-player {
+      margin-bottom: 20px;
+    }
+  </style>
+
 </head>
 <body>
 
-    <nav>
-        <h1>GOAT GLOBAL ADS</h1>
-    </nav>
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <ul>
+      <li><a href="#" onclick="showHome()">Inicio</a></li>
+      <li><a href="#" onclick="showVideos()">Ver Videos</a></li>
+      <li><a href="#" onclick="showCampaigns()">Mis Campañas</a></li>
+      <li><a href="#" onclick="showCommunity()">Comunidad</a></li>
+      <li><a href="#" onclick="signOutUser()">Salir</a></li>
+    </ul>
+  </div>
 
-    <main>
-        <section id="admin-panel">
-    <div class="glass-card">
-        <h2>Subir Nuevo Video</h2>
-        <input type="text" id="video-titulo" placeholder="Título del video">
-        <input type="text" id="video-url" placeholder="Pega el link de YouTube aquí">
-        <button id="btn-publicar">Publicar en GOAT</button>
-    </div>
-</section>
-        <div id="contenedor-videos">
-            <p>Cargando conexión con la base de datos...</p>
-        </div>
-    </main>
+  <!-- Top Bar -->
+  <div id="top-bar" class="top-bar">
+    <span id="user-name">Usuario</span>
+    <span id="credits">⚡ Créditos: 0</span>
+  </div>
 
-    <script type="module" src="script.js"></script>
-</body>
+  <!-- Main Content -->
+  <div id="content" class="content">
+    <h1>Bienvenido a GOAT GLOBAL ADS</h1>
+    <button onclick="signIn()">Iniciar sesión con Google</button>
+  </div>
+
+  <!-- YouTube Iframe API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <script>
+    // Variables globales
+    let currentUser = null;
+
+    // Función de inicio de sesión con Google
+    function signIn() {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then(async (result) => {
+          const user = result.user;
+          currentUser = user;
+          document.getElementById('user-name').innerText = user.displayName;
+          await createUserDocument(user);
+          showHome();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+    // Crear un documento de usuario si no existe
+    async function createUserDocument(user) {
+      const userRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(userRef);
+      if (!docSnap.exists()) {
+        await setDoc(userRef, { creditos: 0 });
+      }
+      updateCreditsDisplay(user.uid);
+    }
+
+    // Mostrar el home y los créditos
+    function showHome() {
+      document.getElementById('content').innerHTML = <h1>Bienvenido, ${currentUser.displayName}</h1>;
+      updateCreditsDisplay(currentUser.uid);
+    }
+
+    // Actualizar los créditos en pantalla
+    async function updateCreditsDisplay(userId) {
+      const userRef = doc(db, 'users', userId);
+      const docSnap = await getDoc(userRef);
+      if (docSnap.exists()) {
+        document.getElementById('credits').innerText = ⚡ Créditos: ${docSnap.data().creditos};
+      }
+    }
+
+    // Función para ver videos
+    function showVideos() {
+      document.getElementById('content').innerHTML = `
+        <div id="video-player"></div>
+        <button id="claim-credits" disabled>Reclamar 10 Créditos</button>
+      `;
+      loadYouTubePlayer();
+    }
+
+    // Cargar el reproductor de YouTube
+    function loadYouTubePlayer() {
+      new YT.Player('video-player', {
+        videoId: 'dQw4w9WgXcQ', // Reemplazar con el ID de tu video
+        events: {
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    // Cambiar el estado del video
+    function onPlayerStateChange(event) {
+      const claimButton = document.getElementById('claim-credits');
+      if (event.data === YT.PlayerState.ENDED) {
+        claimButton.disabled = false;
+      }
+    }
+
+    // Reclamar créditos
+    document.getElementById('claim-credits').addEventListener('click', async () => {
+      const userRef = doc(db, 'users', currentUser.uid);
+      const userSnap = await getDoc(userRef);
+      const newCredits = userSnap.data().creditos + 10;
+      await updateDoc(userRef, { creditos: newCredits });
+      updateCreditsDisplay(currentUser.uid);
+    });
+
+    // Cerrar sesión
+    function signOutUser() {
+      signOut(auth)
+        .then(() => {
+          currentUser = null;
+          document.getElementById('user-name').innerText = 'Usuario';
+          document.getElementById('credits').innerText = '⚡ Créditos: 0';
+          showHome();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+    // Funciones de navegación
+    function showCampaigns() {
+      document.getElementById('content').innerHTML = `
+        <h1>Mis Campañas</h1>
+        <input type="text" id="video-link" placeholder="Pega tu enlace de YouTube">
+        <button onclick="submitCampaign()">Crear campaña</button>
+      `;
+    }
+
+    async function submitCampaign() {
+      const link = document.getElementBy
